@@ -1,0 +1,269 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* BODY */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #0a0a0a;
+    color: white;
+    overflow-x: hidden;
+}
+
+/* NAVBAR */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 8%;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo-img {
+    height: 40px;
+}
+
+.navbar nav a {
+    margin: 0 15px;
+    text-decoration: none;
+    color: white;
+    position: relative;
+}
+
+/* NAV HOVER */
+.navbar nav a::after {
+    content: "";
+    width: 0%;
+    height: 2px;
+    background: #ff3c3c;
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    transition: 0.3s;
+}
+
+.navbar nav a:hover::after {
+    width: 100%;
+}
+
+/* HERO */
+.hero {
+    height: 100vh;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+    background: black;
+}
+
+/* GLOW */
+.hero::before {
+    content: "";
+    position: absolute;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, #ff3c3c, transparent 70%);
+    filter: blur(140px);
+    animation: moveGlow 8s infinite alternate ease-in-out;
+}
+
+@keyframes moveGlow {
+    0% { transform: translate(-20%, -20%); }
+    100% { transform: translate(20%, 20%); }
+}
+
+/* OVERLAY */
+.hero-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+}
+
+/* CONTENT */
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+/* TEXT ANIMATION START STATE */
+.hero-title {
+    font-size: 3.5rem;
+    opacity: 0;
+    transform: translateY(50px);
+}
+
+.hero-subtitle {
+    margin-top: 15px;
+    color: #ccc;
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+/* BUTTONS */
+.hero-buttons {
+    margin-top: 25px;
+}
+
+.primary-btn,
+.secondary-btn {
+    padding: 12px 30px;
+    margin: 10px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+.primary-btn {
+    background: #ff3c3c;
+    border: none;
+}
+
+.primary-btn:hover {
+    transform: scale(1.05);
+}
+
+.secondary-btn {
+    background: transparent;
+    border: 1px solid white;
+    backdrop-filter: blur(10px);
+}
+
+.secondary-btn:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+/* ABOUT */
+.about {
+    padding: 80px 10%;
+    text-align: center;
+}
+
+.about p {
+    max-width: 600px;
+    margin: auto;
+    color: #aaa;
+}
+
+/* FEATURES */
+.features {
+    padding: 80px 10%;
+    text-align: center;
+}
+
+.features-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 40px;
+}
+
+/* GLASS CARD */
+.feature-card {
+    flex: 1;
+    min-width: 250px;
+    padding: 30px;
+    border-radius: 15px;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+    transition: 0.4s;
+}
+
+.feature-card:hover {
+    transform: translateY(-15px) scale(1.03);
+    box-shadow: 0 0 30px #ff3c3c55;
+}
+
+/* TEAM */
+.team {
+    padding: 80px 10%;
+    text-align: center;
+}
+
+.team-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 40px;
+}
+
+.team-card {
+    width: 250px;
+    background: #111;
+    padding: 20px;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+.team-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 0 20px #ff3c3c33;
+}
+
+.team-card img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+/* CONTACT */
+.contact {
+    padding: 80px 10%;
+    text-align: center;
+}
+
+form {
+    max-width: 400px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+form input,
+form textarea {
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    background: #111;
+    color: white;
+}
+
+form button {
+    padding: 12px;
+    background: #ff3c3c;
+    border: none;
+    cursor: pointer;
+}
+
+/* FOOTER */
+footer {
+    text-align: center;
+    padding: 20px;
+    color: #777;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .features-container,
+    .team-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .hero-title {
+        font-size: 2rem;
+    }
+}
