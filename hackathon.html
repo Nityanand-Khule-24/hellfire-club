@@ -39,6 +39,91 @@
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 0, 0, 0.2);
         }
+
+        .glitch {
+            position: relative;
+            color: #ff1a1a;
+            text-shadow: 0 0 10px #ff0000;
+        }
+
+        /* RED SHADOW LAYER */
+        .glitch::before {
+            content: attr(data-text);
+            position: absolute;
+            left: 2px;
+            text-shadow: -2px 0 red;
+            top: 0;
+            color: #ff0000;
+            background: transparent;
+            overflow: hidden;
+            animation: glitchTop 2s infinite linear alternate-reverse;
+        }
+
+        /* BLUE SHADOW LAYER */
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            left: -2px;
+            text-shadow: -2px 0 blue;
+            top: 0;
+            color: #ff0000;
+            background: transparent;
+            overflow: hidden;
+            animation: glitchBottom 2s infinite linear alternate-reverse;
+        }
+
+        /* ANIMATIONS */
+        @keyframes glitchTop {
+            0% {
+                clip-path: inset(0 0 80% 0);
+            }
+
+            20% {
+                clip-path: inset(10% 0 60% 0);
+            }
+
+            40% {
+                clip-path: inset(30% 0 40% 0);
+            }
+
+            60% {
+                clip-path: inset(50% 0 20% 0);
+            }
+
+            80% {
+                clip-path: inset(70% 0 10% 0);
+            }
+
+            100% {
+                clip-path: inset(0 0 80% 0);
+            }
+        }
+
+        @keyframes glitchBottom {
+            0% {
+                clip-path: inset(80% 0 0 0);
+            }
+
+            20% {
+                clip-path: inset(60% 0 10% 0);
+            }
+
+            40% {
+                clip-path: inset(40% 0 30% 0);
+            }
+
+            60% {
+                clip-path: inset(20% 0 50% 0);
+            }
+
+            80% {
+                clip-path: inset(10% 0 70% 0);
+            }
+
+            100% {
+                clip-path: inset(80% 0 0 0);
+            }
+        }
     </style>
 </head>
 
@@ -61,9 +146,31 @@
 
     </nav>
 
+    <section class="text-center py-12">
+        <h2 class="text-2xl text-red-500 font-bold mb-4 glow">
+            Event Starts In
+        </h2>
+
+        <div id="countdown" class="flex justify-center gap-6 text-3xl font-bold text-white">
+            <div><span id="days">00</span>
+                <p class="text-sm text-gray-400">Days</p>
+            </div>
+            <div><span id="hours">00</span>
+                <p class="text-sm text-gray-400">Hours</p>
+            </div>
+            <div><span id="minutes">00</span>
+                <p class="text-sm text-gray-400">Minutes</p>
+            </div>
+            <div><span id="seconds">00</span>
+                <p class="text-sm text-gray-400">Seconds</p>
+            </div>
+        </div>
+    </section>
+
     <!-- HERO -->
     <section class="text-center py-24 px-6">
-        <h1 class="text-6xl font-bold text-red-600 glow mb-6">
+        <h1 class="glitch text-6xl md:text-7xl font-bold text-red-600 mb-6 tracking-wide"
+            data-text="UPSIDE DOWN CODEX 2026">
             UPSIDE DOWN CODEX 2026
         </h1>
         <p class="text-gray-300 max-w-2xl mx-auto text-lg">
@@ -97,8 +204,7 @@
                 Samarth College Of Engineering And Management, Pune (412410)
             </p>
 
-            <button
-                onclick="window.open('https://maps.app.goo.gl/JWmuBETWTB9rZuXY9', '_blank')"
+            <button onclick="window.open('https://maps.app.goo.gl/JWmuBETWTB9rZuXY9', '_blank')"
                 class="px-4 py-2 bg-red-600 rounded-lg text-white font-bold hover:scale-105 transition-all">
                 View on Map
             </button>
@@ -137,7 +243,29 @@
             Register Now
         </button>
     </section>
+    <script>
+        const eventDate = new Date("April 17, 2026 00:00:00").getTime();
 
+        const timer = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = eventDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((distance / (1000 * 60)) % 60);
+            const seconds = Math.floor((distance / 1000) % 60);
+
+            document.getElementById("days").innerText = days;
+            document.getElementById("hours").innerText = hours;
+            document.getElementById("minutes").innerText = minutes;
+            document.getElementById("seconds").innerText = seconds;
+
+            if (distance < 0) {
+                clearInterval(timer);
+                document.getElementById("countdown").innerHTML = "🔥 Event Started!";
+            }
+        }, 1000);
+    </script>
     <!-- Particles Script -->
     <script>
         tsParticles.load("tsparticles", {
@@ -156,6 +284,12 @@
                 color: "#000000"
             }
         });
+    </script>
+    <script>
+        setInterval(() => {
+            const title = document.querySelector(".glitch");
+            title.style.opacity = (Math.random() > 0.9) ? "0.6" : "1";
+        }, 100);
     </script>
 
 </body>
