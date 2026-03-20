@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Join The Upside Down</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body {
+            background: black;
+            color: white;
+            font-family: serif;
+            overflow: hidden;
+        }
+
+        /* BLOOD RED GLOW */
+        .glow {
+            text-shadow: 0 0 10px red, 0 0 40px red;
+        }
+
+        /* BLOODY DRIP EFFECT */
+        .drip {
+            position: relative;
+        }
+
+        .drip::after {
+            content: "";
+            position: absolute;
+            width: 2px;
+            height: 20px;
+            background: red;
+            bottom: -20px;
+            left: 50%;
+            animation: drip 2s infinite;
+        }
+
+        @keyframes drip {
+            0% {
+                height: 0;
+            }
+
+            100% {
+                height: 25px;
+                opacity: 0;
+            }
+        }
+
+        /* GLASS DARK CARD */
+        .card {
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+        }
+
+        /* INPUT STYLE */
+        input,
+        textarea {
+            background: transparent;
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            padding: 12px;
+            width: 100%;
+            color: white;
+            border-radius: 8px;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: red;
+            box-shadow: 0 0 10px red;
+        }
+    </style>
+</head>
+
+<body class="flex items-center justify-center min-h-screen">
+
+    <div class="card p-10 rounded-xl w-full max-w-xl">
+
+        <h1 class="text-4xl text-center text-red-600 glow drip mb-8">
+            ENTER IN UPSIDE DOWN CODEX 2026
+        </h1>
+
+        <form id="form" class="space-y-4">
+
+            <!-- MAIN INFO -->
+            <div class="grid grid-cols-2 gap-2">
+                <input type="text" id="name" placeholder="Your Name" required class="p-2 h-10 text-sm rounded-md">
+
+                <input type="email" id="email" placeholder="Email" required class="p-2 h-10 text-sm rounded-md">
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+                <input type="text" id="team" placeholder="Team Name" class="p-2 h-10 text-sm rounded-md">
+
+                <input type="number" id="size" placeholder="Team Size (2-4)" class="p-2 h-10 text-sm rounded-md">
+            </div>
+
+            <!-- TEAM MEMBERS -->
+            <div class="space-y-2">
+                <input type="text" id="member1" placeholder="Team Member 1" required
+                    class="p-2 h-10 text-sm rounded-md">
+
+                <input type="text" id="member2" placeholder="Team Member 2" required
+                    class="p-2 h-10 text-sm rounded-md">
+
+                <input type="text" id="member3" placeholder="Team Member 3" class="p-2 h-10 text-sm rounded-md">
+
+                <input type="text" id="member4" placeholder="Team Member 4" class="p-2 h-10 text-sm rounded-md">
+            </div>
+            <div class="text-center mb-6">
+
+                <h2 class="text-red-500 font-bold text-lg mb-2">Pay Registration Fee</h2>
+
+                <img src="assets/qr.png" alt="Payment QR" class="w-40 mx-auto rounded-lg border border-red-500/30">
+
+                <p class="text-gray-400 text-sm mt-2">
+                    Scan & Pay → Then upload screenshot below
+                </p>
+
+            </div>
+
+            <div>
+                <label class="text-sm text-gray-400">Upload Payment Screenshot</label>
+
+                <input type="file" id="screenshot" accept="image/*" required class="mt-2 w-full text-sm text-gray-300
+    file:mr-3 file:py-1.5 file:px-3
+    file:bg-red-600 file:text-white
+    file:rounded file:border-0
+    file:cursor-pointer">
+            </div>
+
+            <button type="submit" class="w-full py-3 bg-red-700 rounded-lg font-bold hover:scale-105 transition">
+                SUBMIT
+            </button>
+
+        </form>
+
+        <p id="msg" class="text-center text-green-400 mt-4"></p>
+
+    </div>
+
+    <script>
+        const scriptURL = "YOUR_GOOGLE_SCRIPT_URL";
+
+        document.getElementById("form").addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const data = {
+                name: document.getElementById("name").value,
+                email: document.getElementById("email").value,
+                team: document.getElementById("team").value,
+                size: document.getElementById("size").value,
+                member1: document.getElementById("member1").value,
+                member2: document.getElementById("member2").value,
+                member3: document.getElementById("member3").value,
+                member4: document.getElementById("member4").value
+            };
+
+            await fetch(scriptURL, {
+                method: "POST",
+                body: JSON.stringify(data)
+            });
+
+            document.getElementById("msg").innerText = "🔥 Registered Successfully!";
+            this.reset();
+        });
+    </script>
+
+</body>
+
+</html>
