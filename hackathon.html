@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HellFired Hackathon</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- 3D Background (Particles) -->
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background: black;
+            color: white;
+            font-family: 'Cinzel', serif;
+            overflow-x: hidden;
+        }
+
+        #tsparticles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .glow {
+            text-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+        }
+
+        .card {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 0, 0, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 3D Background -->
+    <div id="tsparticles"></div>
+
+    <!-- NAV -->
+    <nav class="flex justify-between items-center px-8 py-4 border-b border-red-900">
+
+        <!-- Left Side (Logo + Name) -->
+        <div class="flex items-center gap-3">
+            <img src="assets/logo.png" alt="HellFired Logo" class="w-10 h-10 object-contain">
+            <h1 class="text-2xl font-bold text-red-500 glow">HellFireClub</h1>
+        </div>
+
+        <!-- Right Side -->
+        <a href="index.html" class="text-gray-300 hover:text-red-500">Back</a>
+
+    </nav>
+
+    <!-- HERO -->
+    <section class="text-center py-24 px-6">
+        <h1 class="text-6xl font-bold text-red-600 glow mb-6">
+            UPSIDE DOWN CODEX 2026
+        </h1>
+        <p class="text-gray-300 max-w-2xl mx-auto text-lg">
+            Enter the Upside Down of innovation. Build, break, and dominate in a 24-hour
+            coding war where only the strongest minds survive.
+        </p>
+    </section>
+
+    <!-- DETAILS -->
+    <section class="max-w-6xl mx-auto px-6 py-12 grid md:grid-cols-4 gap-8">
+
+        <div class="card p-6 rounded-xl">
+            <h3 class="text-xl font-bold text-red-500 mb-2">📅 Date</h3>
+            <p>17 April 2026</p>
+        </div>
+
+        <div class="card p-6 rounded-xl">
+            <h3 class="text-xl font-bold text-red-500 mb-2">💰 Prize Pool</h3>
+            <p>₹1,00,000+</p>
+        </div>
+
+        <div class="card p-6 rounded-xl">
+            <h3 class="text-xl font-bold text-red-500 mb-2">📍 Mode</h3>
+            <p>Offline</p>
+        </div>
+
+        <div class="card p-6 rounded-xl">
+            <h3 class="text-xl font-bold text-red-500 mb-2">📍 Location</h3>
+
+            <p class="text-gray-300 mb-4">
+                Samarth College Of Engineering And Management, Pune (412410)
+            </p>
+
+            <button
+                onclick="window.open('https://maps.app.goo.gl/JWmuBETWTB9rZuXY9', '_blank')"
+                class="px-4 py-2 bg-red-600 rounded-lg text-white font-bold hover:scale-105 transition-all">
+                View on Map
+            </button>
+        </div>
+
+    </section>
+
+    <!-- ABOUT -->
+    <section class="max-w-5xl mx-auto px-6 py-16 text-center">
+        <h2 class="text-3xl font-bold mb-6 glow text-red-500">About the Event</h2>
+        <p class="text-gray-400 leading-relaxed">
+            This is not just a hackathon — it's a battle in the digital upside down.
+            Collaborate with your team, fight through challenges, and create something
+            powerful enough to stand out.
+        </p>
+    </section>
+
+    <!-- RULES -->
+    <section class="max-w-5xl mx-auto px-6 py-16">
+        <h2 class="text-3xl font-bold mb-6 text-center text-red-500 glow">Rules</h2>
+
+        <ul class="space-y-4 text-gray-300 text-center">
+            <li>✔ Team size: 2–4 members</li>
+            <li>✔ Bring your own laptop</li>
+            <li>✔ Projects must be original</li>
+            <li>✔ No plagiarism allowed</li>
+        </ul>
+    </section>
+
+    <!-- CTA -->
+    <section class="text-center py-20">
+        <h2 class="text-3xl font-bold mb-6 glow text-red-500">Ready to Enter?</h2>
+
+        <button onclick="window.open('https://', '_blank')"
+            class="px-8 py-4 bg-red-600 rounded-lg font-bold hover:scale-110 hover:shadow-lg hover:shadow-red-500/50 transition-all">
+            Register Now
+        </button>
+    </section>
+
+    <!-- Particles Script -->
+    <script>
+        tsParticles.load("tsparticles", {
+            particles: {
+                number: { value: 80 },
+                color: { value: "#ff0000" },
+                shape: { type: "circle" },
+                opacity: { value: 0.5 },
+                size: { value: 2 },
+                move: {
+                    enable: true,
+                    speed: 1
+                }
+            },
+            background: {
+                color: "#000000"
+            }
+        });
+    </script>
+
+</body>
+
+</html>
