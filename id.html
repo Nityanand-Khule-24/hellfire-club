@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>ID Card</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body {
+            background: black;
+            color: white;
+            text-align: center;
+            font-family: monospace;
+        }
+
+        .card {
+            margin-top: 50px;
+            display: inline-block;
+            padding: 20px;
+            border: 2px solid red;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>🔥 HellFired ID Card</h1>
+
+    <div id="card"></div>
+
+    <script>
+        const supabaseClient = supabase.createClient(
+            "https://iwicuuudunilgxcaxgnn.supabase.co",
+            "YOUR_ANON_KEY"
+        );
+
+        // GET ID FROM URL
+        const params = new URLSearchParams(window.location.search);
+        const teamID = params.get("id");
+
+        async function loadData() {
+
+            const { data } = await supabaseClient
+                .from("teams")
+                .select("*")
+                .eq("team_id", teamID)
+                .single();
+
+            if (!data) {
+                document.getElementById("card").innerHTML = "❌ Invalid ID";
+                return;
+            }
+
+            const qr = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + data.team_id;
+
+            document.getElementById("card").innerHTML = `
+<div class="card">
+<h2>HellFired Club</h2>
+<p>${data.team_name}</p>
+<p>${data.team_id}</p>
+<img src="${qr}">
+</div>
+`;
+        }
+
+        loadData();
+    </script>
+    <button onclick="downloadCard()">Download ID</button>
+
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+    <script>
+        function downloadCard() {
+            html2canvas(document.getElementById("card")).then(canvas => {
+                const link = document.createElement("a");
+                link.download = "ID.png";
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        }
+    </script>
+</body>
+
+</html>

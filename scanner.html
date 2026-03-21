@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Scanner</title>
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+body {
+  background:black;
+  color:white;
+  text-align:center;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Scan Team QR</h1>
+
+<div id="reader" style="width:300px;margin:auto;"></div>
+
+<div id="result"></div>
+
+<script>
+const supabaseClient = supabase.createClient(
+  "https://iwicuuudunilgxcaxgnn.supabase.co",
+  "YOUR_ANON_KEY"
+);
+
+function onScanSuccess(decodedText) {
+
+document.getElementById("result").innerHTML = "Loading...";
+
+supabaseClient
+  .from("teams")
+  .select("*")
+  .eq("team_id", decodedText)
+  .single()
+  .then(({ data }) => {
+
+    if (!data) {
+      document.getElementById("result").innerHTML = "❌ Invalid Team";
+      return;
+    }
+
+    document.getElementById("result").innerHTML = `
+      <h2>${data.team_name}</h2>
+      <p>${data.team_id}</p>
+      <p>${data.m1}</p>
+      <p>${data.m2}</p>
+    `;
+  });
+}
+
+new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 })
+  .render(onScanSuccess);
+</script>
+
+</body>
+</html>

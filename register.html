@@ -3,168 +3,182 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Join The Upside Down</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HellFired Registration</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
     <style>
         body {
             background: black;
             color: white;
-            font-family: serif;
-            overflow: hidden;
+            font-family: 'Courier New', monospace;
         }
 
-        /* BLOOD RED GLOW */
         .glow {
-            text-shadow: 0 0 10px red, 0 0 40px red;
+            text-shadow: 0 0 15px red;
         }
 
-        /* BLOODY DRIP EFFECT */
-        .drip {
-            position: relative;
-        }
-
-        .drip::after {
-            content: "";
-            position: absolute;
-            width: 2px;
-            height: 20px;
-            background: red;
-            bottom: -20px;
-            left: 50%;
-            animation: drip 2s infinite;
-        }
-
-        @keyframes drip {
-            0% {
-                height: 0;
-            }
-
-            100% {
-                height: 25px;
-                opacity: 0;
-            }
-        }
-
-        /* GLASS DARK CARD */
         .card {
             background: rgba(0, 0, 0, 0.7);
             border: 1px solid rgba(255, 0, 0, 0.3);
-            backdrop-filter: blur(15px);
+            backdrop-filter: blur(10px);
         }
 
-        /* INPUT STYLE */
-        input,
-        textarea {
-            background: transparent;
-            border: 1px solid rgba(255, 0, 0, 0.3);
-            padding: 12px;
+        input {
+            background: black;
+            border: 1px solid #550000;
+            padding: 10px;
             width: 100%;
             color: white;
-            border-radius: 8px;
-        }
-
-        input:focus,
-        textarea:focus {
-            outline: none;
-            border-color: red;
-            box-shadow: 0 0 10px red;
         }
     </style>
 </head>
 
-<body class="flex items-center justify-center min-h-screen">
+<body>
 
-    <div class="card p-10 rounded-xl w-full max-w-xl">
+    <div class="text-center py-10">
+        <h1 class="text-4xl text-red-600 glow">UPSIDE DOWN REGISTRATION</h1>
+    </div>
 
-        <h1 class="text-4xl text-center text-red-600 glow drip mb-8">
-            ENTER IN UPSIDE DOWN CODEX 2026
-        </h1>
+    <div class="max-w-3xl mx-auto card p-8 rounded-xl">
+        <form id="form" class="space-y-6">
 
-        <form id="form" class="space-y-4">
+            <input type="text" id="team" placeholder="Team Name" required>
+            <input type="email" id="email" placeholder="Team Email" required>
 
-            <!-- MAIN INFO -->
-            <div class="grid grid-cols-2 gap-2">
-                <input type="text" id="name" placeholder="Your Name" required class="p-2 h-10 text-sm rounded-md">
-
-                <input type="email" id="email" placeholder="Email" required class="p-2 h-10 text-sm rounded-md">
+            <div class="grid grid-cols-2 gap-4">
+                <input id="m1" placeholder="Member 1" required>
+                <input id="p1" placeholder="Phone" required>
             </div>
 
-            <div class="grid grid-cols-2 gap-2">
-                <input type="text" id="team" placeholder="Team Name" class="p-2 h-10 text-sm rounded-md">
-
-                <input type="number" id="size" placeholder="Team Size (2-4)" class="p-2 h-10 text-sm rounded-md">
+            <div class="grid grid-cols-2 gap-4">
+                <input id="m2" placeholder="Member 2" required>
+                <input id="p2" placeholder="Phone" required>
             </div>
 
-            <!-- TEAM MEMBERS -->
-            <div class="space-y-2">
-                <input type="text" id="member1" placeholder="Team Member 1" required
-                    class="p-2 h-10 text-sm rounded-md">
-
-                <input type="text" id="member2" placeholder="Team Member 2" required
-                    class="p-2 h-10 text-sm rounded-md">
-
-                <input type="text" id="member3" placeholder="Team Member 3" class="p-2 h-10 text-sm rounded-md">
-
-                <input type="text" id="member4" placeholder="Team Member 4" class="p-2 h-10 text-sm rounded-md">
-            </div>
-            <div class="text-center mb-6">
-
-                <h2 class="text-red-500 font-bold text-lg mb-2">Pay Registration Fee</h2>
-
-                <img src="assets/qr.png" alt="Payment QR" class="w-40 mx-auto rounded-lg border border-red-500/30">
-
-                <p class="text-gray-400 text-sm mt-2">
-                    Scan & Pay → Then upload screenshot below
-                </p>
-
+            <div class="grid grid-cols-2 gap-4">
+                <input id="m3" placeholder="Member 3">
+                <input id="p3" placeholder="Phone">
             </div>
 
-            <div>
-                <label class="text-sm text-gray-400">Upload Payment Screenshot</label>
-
-                <input type="file" id="screenshot" accept="image/*" required class="mt-2 w-full text-sm text-gray-300
-    file:mr-3 file:py-1.5 file:px-3
-    file:bg-red-600 file:text-white
-    file:rounded file:border-0
-    file:cursor-pointer">
+            <div class="grid grid-cols-2 gap-4">
+                <input id="m4" placeholder="Member 4">
+                <input id="p4" placeholder="Phone">
             </div>
 
-            <button type="submit" class="w-full py-3 bg-red-700 rounded-lg font-bold hover:scale-105 transition">
-                SUBMIT
+            <div class="text-center">
+                <h2 class="text-red-500">Scan & Pay</h2>
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=PAY" class="mx-auto w-40">
+                <input id="utr" placeholder="UTR ID" required>
+            </div>
+
+            <input type="file" id="file" required>
+
+            <button type="submit" class="w-full py-3 bg-red-600 rounded-lg">
+                🔥 Register
             </button>
 
         </form>
-
-        <p id="msg" class="text-center text-green-400 mt-4"></p>
-
     </div>
 
-    <script>
-        const scriptURL = "YOUR_GOOGLE_SCRIPT_URL";
+    <div id="idCard" style="display:none; margin-top:30px;"></div>
 
-        document.getElementById("form").addEventListener("submit", async function (e) {
+    <script>
+        emailjs.init({
+            publicKey: "dKtwUtnTWPBkqCxZP"
+        });
+
+        const supabaseClient = supabase.createClient(
+            "https://iwicuuudunilgxcaxgnn.supabase.co",
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3aWN1dXVkdW5pbGd4Y2F4Z25uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwOTkwMDksImV4cCI6MjA4OTY3NTAwOX0.zMKajvwA0QcJhHk63uovRZva4c6q_5wSD9WCeXeMjUA" // 🔥 PUT YOUR REAL KEY HERE
+        );
+
+        document.getElementById("form").addEventListener("submit", async (e) => {
             e.preventDefault();
 
-            const data = {
-                name: document.getElementById("name").value,
-                email: document.getElementById("email").value,
-                team: document.getElementById("team").value,
-                size: document.getElementById("size").value,
-                member1: document.getElementById("member1").value,
-                member2: document.getElementById("member2").value,
-                member3: document.getElementById("member3").value,
-                member4: document.getElementById("member4").value
-            };
+            try {
 
-            await fetch(scriptURL, {
-                method: "POST",
-                body: JSON.stringify(data)
-            });
+                const file = document.getElementById("file").files[0];
+                if (!file) return alert("Upload screenshot");
 
-            document.getElementById("msg").innerText = "🔥 Registered Successfully!";
-            this.reset();
+                const fileName = Date.now() + "_" + file.name;
+
+                const { error: uploadError } = await supabaseClient.storage
+                    .from("screenshots")
+                    .upload(fileName, file);
+
+                if (uploadError) return alert("Upload failed");
+
+                const fileUrl =
+                    "https://iwicuuudunilgxcaxgnn.supabase.co/storage/v1/object/public/screenshots/" + fileName;
+
+                const teamID = "HFC-" + Math.random().toString(36).substring(2, 7).toUpperCase();
+
+                const teamName = document.getElementById("team").value;
+                const email = document.getElementById("email").value;
+
+                const { error } = await supabaseClient.from("teams").insert([{
+                    team_name: teamName,
+                    team_id: teamID,
+                    email: email,
+
+                    m1: m1.value, p1: p1.value,
+                    m2: m2.value, p2: p2.value,
+                    m3: m3.value, p3: p3.value,
+                    m4: m4.value, p4: p4.value,
+
+                    utr: utr.value,
+                    screenshot_url: fileUrl
+                }]);
+
+                if (error) return alert(error.message);
+
+                alert("🔥 Registered!\nID: " + teamID);
+
+                // ID CARD
+                generateIDCard(teamID, teamName);
+
+                // EMAIL
+                const link = "https://hellfireclubscoe.netlify.app/id.html?id=" + teamID;
+
+                emailjs.send("service_x4cte7o", "template_7yff2wj", {
+                    team_name: teamName,
+                    team_id: teamID,
+                    email: email,
+                    link: link
+                })
+                    .then((res) => {
+                        console.log("SUCCESS", res);
+                    })
+                    .catch((err) => {
+                        console.error("FAILED", err);
+                    });
+
+                document.getElementById("form").reset();
+
+            } catch (err) {
+                console.error(err);
+                alert("Error occurred");
+            }
         });
+
+        function generateIDCard(teamID, teamName) {
+            const qr = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + teamID;
+
+            document.getElementById("idCard").innerHTML = `
+<div style="width:300px;padding:20px;background:black;border:2px solid red;text-align:center">
+<h2 style="color:red">HellFired Club</h2>
+<p>${teamName}</p>
+<p>${teamID}</p>
+<img src="${qr}">
+</div>
+`;
+
+            document.getElementById("idCard").style.display = "block";
+        }
     </script>
 
 </body>
