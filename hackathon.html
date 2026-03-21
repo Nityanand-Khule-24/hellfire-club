@@ -16,6 +16,35 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
 
     <style>
+        :root {
+            --red: #c0392b;
+            --red-glow: #ff3c2a;
+            --orange: #e67e22;
+            --yellow: #f1c40f;
+            --dark-bg: #060608;
+            --darker: #02020a;
+            --panel: #0a080f;
+            --card: #0e0b18;
+            --border: #2a1a3a;
+            --text: #e8dff5;
+            --muted: #8a7aa0;
+            --cyan: #00e5ff;
+            --cyan-glow: rgba(0, 229, 255, 0.3);
+            --purple: #7b1fa2;
+            --light-purple: #ce93d8;
+            --white-flicker: #fff8ee;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             background: black;
             color: white;
@@ -39,11 +68,723 @@
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 0, 0, 0.2);
         }
+
+        /* ---- PARTICLES / FLOATING PARTICLES ---- */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            animation: floatUp linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(110vh) scale(0);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.6;
+            }
+
+            90% {
+                opacity: 0.3;
+            }
+
+            100% {
+                transform: translateY(-10vh) scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        /* ---- NOISE OVERLAY ---- */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            background-size: 200px 200px;
+            opacity: 0.06;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ---- RED LIGHTNING BG ---- */
+        .lightning-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background: radial-gradient(ellipse at 50% -10%, rgba(192, 57, 43, 0.12) 0%, transparent 60%),
+                radial-gradient(ellipse at 100% 50%, rgba(100, 0, 180, 0.07) 0%, transparent 50%),
+                radial-gradient(ellipse at 0% 80%, rgba(0, 229, 255, 0.04) 0%, transparent 40%);
+        }
+
+        /* ---- DEMOGORGON SVG CHARACTER ---- */
+        .demogorgon-container {
+            position: absolute;
+            right: -20px;
+            bottom: -20px;
+            width: clamp(200px, 30vw, 380px);
+            opacity: 0.22;
+            pointer-events: none;
+            animation: demoFloat 5s ease-in-out infinite alternate;
+            z-index: 5;
+        }
+
+        @keyframes demoFloat {
+            from {
+                transform: translateY(0px) rotate(-2deg);
+            }
+
+            to {
+                transform: translateY(-20px) rotate(2deg);
+            }
+        }
+
+        .will-container {
+            position: absolute;
+            left: 10px;
+            bottom: 40px;
+            width: clamp(80px, 12vw, 160px);
+            opacity: 0.3;
+            pointer-events: none;
+            animation: willFlicker 6s steps(2) infinite;
+            z-index: 5;
+        }
+
+        @keyframes willFlicker {
+
+            0%,
+            90%,
+            100% {
+                opacity: 0.3;
+            }
+
+            92% {
+                opacity: 0.05;
+            }
+
+            94% {
+                opacity: 0.3;
+            }
+        }
+
+        /* ---- LIGHTS STRING ---- */
+        .lights-string {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            padding: 0.5rem 0;
+            flex-wrap: wrap;
+        }
+
+        .bulb {
+            width: 14px;
+            height: 20px;
+            border-radius: 50% 50% 40% 40%;
+            position: relative;
+            animation: bulbFlicker 3s steps(1) infinite;
+        }
+
+        .bulb::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 6px;
+            background: #555;
+            border-radius: 2px 2px 0 0;
+        }
+
+        .bulb:nth-child(1) {
+            background: #e74c3c;
+            box-shadow: 0 0 10px #e74c3c;
+            animation-delay: 0s;
+        }
+
+        .bulb:nth-child(2) {
+            background: #f39c12;
+            box-shadow: 0 0 10px #f39c12;
+            animation-delay: 0.3s;
+        }
+
+        .bulb:nth-child(3) {
+            background: #2ecc71;
+            box-shadow: 0 0 10px #2ecc71;
+            animation-delay: 0.6s;
+        }
+
+        .bulb:nth-child(4) {
+            background: #3498db;
+            box-shadow: 0 0 10px #3498db;
+            animation-delay: 0.9s;
+        }
+
+        .bulb:nth-child(5) {
+            background: #9b59b6;
+            box-shadow: 0 0 10px #9b59b6;
+            animation-delay: 1.2s;
+        }
+
+        .bulb:nth-child(6) {
+            background: #e74c3c;
+            box-shadow: 0 0 10px #e74c3c;
+            animation-delay: 1.5s;
+        }
+
+        .bulb:nth-child(7) {
+            background: #1abc9c;
+            box-shadow: 0 0 10px #1abc9c;
+            animation-delay: 1.8s;
+        }
+
+        .bulb:nth-child(8) {
+            background: #f39c12;
+            box-shadow: 0 0 10px #f39c12;
+            animation-delay: 2.1s;
+        }
+
+        .bulb:nth-child(9) {
+            background: #e74c3c;
+            box-shadow: 0 0 10px #e74c3c;
+            animation-delay: 2.4s;
+        }
+
+        .bulb:nth-child(10) {
+            background: #3498db;
+            box-shadow: 0 0 10px #3498db;
+            animation-delay: 2.7s;
+        }
+
+        .bulb:nth-child(11) {
+            background: #9b59b6;
+            box-shadow: 0 0 10px #9b59b6;
+            animation-delay: 3.0s;
+        }
+
+        .bulb:nth-child(12) {
+            background: #2ecc71;
+            box-shadow: 0 0 10px #2ecc71;
+            animation-delay: 3.3s;
+        }
+
+        @keyframes bulbFlicker {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.2;
+            }
+        }
+
+        /* ---- WIRE LINE ---- */
+        .wire {
+            width: 90%;
+            max-width: 900px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #555, #888, #555, transparent);
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* ---- SECTION CONTAINER ---- */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* ---- SECTION HEADER ---- */
+        .section-header {
+            text-align: center;
+            padding: 3.5rem 1rem 1rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .section-header h2 {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: clamp(1.4rem, 4vw, 2.2rem);
+            color: var(--white-flicker);
+            text-shadow: 0 0 20px var(--red-glow), 0 0 50px rgba(192, 57, 43, 0.4);
+            letter-spacing: 0.05em;
+        }
+
+        .section-header .icon {
+            font-size: 2rem;
+            margin-bottom: 0.4rem;
+            animation: iconBob 2s ease-in-out infinite alternate;
+            display: block;
+        }
+
+        @keyframes iconBob {
+            from {
+                transform: translateY(0);
+            }
+
+            to {
+                transform: translateY(-6px);
+            }
+        }
+
+        .section-divider {
+            width: 120px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--red-glow), transparent);
+            margin: 0.8rem auto 0;
+        }
+
+        /* ---- RULE CARDS ---- */
+        .rules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.2rem;
+            padding: 1.5rem 0 3rem;
+        }
+
+        .rule-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 1.4rem 1.6rem;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: cardReveal 0.6s ease both;
+        }
+
+        .rule-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 40px rgba(192, 57, 43, 0.2), 0 0 0 1px rgba(192, 57, 43, 0.3);
+        }
+
+        .rule-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--red-glow), var(--purple));
+        }
+
+        .rule-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at top left, rgba(192, 57, 43, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        @keyframes cardReveal {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .rule-number {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--red-glow);
+            letter-spacing: 0.2em;
+            margin-bottom: 0.4rem;
+            text-transform: uppercase;
+        }
+
+        .rule-card p {
+            font-size: 0.92rem;
+            line-height: 1.65;
+            color: #c8bdd8;
+            font-weight: 300;
+            letter-spacing: 0.01em;
+        }
+
+        .rule-card p strong {
+            color: var(--white-flicker);
+            font-weight: 600;
+        }
+
+        /* ---- DISQUALIFICATION SECTION ---- */
+        .demogorgon-clause {
+            background: linear-gradient(135deg, #1a0005 0%, #0e0010 100%);
+            border: 1px solid rgba(192, 57, 43, 0.4);
+            border-radius: 6px;
+            padding: 2.5rem 2rem;
+            margin: 2rem 0 3rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 60px rgba(192, 57, 43, 0.1), inset 0 0 40px rgba(192, 57, 43, 0.04);
+        }
+
+        .demogorgon-clause::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 6px;
+            border: 1px solid transparent;
+            background: linear-gradient(135deg, rgba(192, 57, 43, 0.3), transparent, rgba(123, 31, 162, 0.3)) border-box;
+            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: destination-out;
+            mask-composite: exclude;
+            animation: borderSpin 4s linear infinite;
+        }
+
+        @keyframes borderSpin {
+            0% {
+                filter: hue-rotate(0deg);
+            }
+
+            100% {
+                filter: hue-rotate(360deg);
+            }
+        }
+
+        .demogorgon-clause h3 {
+            font-family: 'Cinzel Decorative', serif;
+            font-size: clamp(1rem, 3vw, 1.6rem);
+            color: var(--red-glow);
+            text-shadow: 0 0 20px rgba(255, 60, 42, 0.6);
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .disq-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 0.8rem;
+        }
+
+        .disq-list li {
+            font-size: 0.9rem;
+            padding: 0.6rem 1rem 0.6rem 2rem;
+            background: rgba(192, 57, 43, 0.08);
+            border-left: 2px solid var(--red-glow);
+            color: #e0c8cc;
+            position: relative;
+            letter-spacing: 0.01em;
+        }
+
+        .disq-list li::before {
+            content: '⚡';
+            position: absolute;
+            left: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        /* ---- SCHEDULE TABLE ---- */
+        .schedule-wrap {
+            overflow-x: auto;
+            border-radius: 4px;
+            margin: 1.5rem 0 3rem;
+        }
+
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+
+        .schedule-table thead th {
+            background: linear-gradient(90deg, #1a0010 0%, #0d001a 100%);
+            color: var(--light-purple);
+            font-family: 'Share Tech Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            padding: 1rem 1.2rem;
+            border-bottom: 2px solid var(--red-glow);
+            text-align: left;
+            font-size: 0.75rem;
+        }
+
+        .schedule-table tbody tr {
+            border-bottom: 1px solid rgba(42, 26, 58, 0.8);
+            transition: background 0.2s;
+        }
+
+        .schedule-table tbody tr:hover {
+            background: rgba(192, 57, 43, 0.06);
+        }
+
+        .schedule-table tbody tr:nth-child(even) {
+            background: rgba(10, 8, 15, 0.7);
+        }
+
+        .schedule-table tbody td {
+            padding: 0.85rem 1.2rem;
+            color: #c8bdd8;
+            vertical-align: top;
+        }
+
+        .schedule-table .time-col {
+            font-family: 'Share Tech Mono', monospace;
+            color: var(--cyan);
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
+
+        .schedule-table .activity-col {
+            font-weight: 400;
+        }
+
+        .schedule-table .mark-col {
+            color: var(--yellow);
+            font-family: 'Share Tech Mono', monospace;
+            white-space: nowrap;
+        }
+
+        /* ---- BRING IT LIST ---- */
+        .bring-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            padding: 1rem 0 3rem;
+        }
+
+        .bring-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1rem;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #c8bdd8;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .bring-item:hover {
+            border-color: rgba(0, 229, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.07);
+        }
+
+        .bring-icon {
+            font-size: 1.5rem;
+        }
+
+        /* ---- CODE OF CONDUCT ---- */
+        .conduct-list {
+            list-style: none;
+            padding: 1rem 0 3rem;
+            display: grid;
+            gap: 0.8rem;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        }
+
+        .conduct-list li {
+            padding: 1rem 1.2rem;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #c8bdd8;
+            line-height: 1.6;
+            position: relative;
+            padding-left: 2.4rem;
+        }
+
+        .conduct-list li::before {
+            content: '🔦';
+            position: absolute;
+            left: 0.7rem;
+            top: 1rem;
+            font-size: 1rem;
+        }
+
+        .conduct-list li strong {
+            display: block;
+            color: var(--light-purple);
+            margin-bottom: 0.2rem;
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        /* ---- FOOTER ---- */
+        .footer {
+            text-align: center;
+            padding: 3rem 1rem 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-quote {
+            font-family: 'Creepster', cursive;
+            font-size: clamp(1.2rem, 4vw, 2rem);
+            color: var(--red-glow);
+            text-shadow: 0 0 30px rgba(255, 60, 42, 0.5);
+            letter-spacing: 0.05em;
+            margin-bottom: 0.8rem;
+            animation: quoteFlicker 7s steps(1) infinite;
+        }
+
+        @keyframes quoteFlicker {
+
+            0%,
+            92%,
+            100% {
+                opacity: 1;
+            }
+
+            93% {
+                opacity: 0.3;
+            }
+
+            95% {
+                opacity: 1;
+            }
+
+            97% {
+                opacity: 0.5;
+            }
+
+            99% {
+                opacity: 1;
+            }
+        }
+
+        .footer-sub {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--muted);
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            margin-top: 0.4rem;
+        }
+
+        /* ---- IMPORTANT NOTES ---- */
+        .notes-grid {
+            display: grid;
+            gap: 0.7rem;
+            padding: 1rem 0 3rem;
+        }
+
+        .note-item {
+            padding: 0.9rem 1.2rem 0.9rem 3rem;
+            background: rgba(123, 31, 162, 0.08);
+            border: 1px solid rgba(123, 31, 162, 0.25);
+            border-radius: 4px;
+            font-size: 0.88rem;
+            color: #c8bdd8;
+            position: relative;
+            line-height: 1.65;
+        }
+
+        .note-item::before {
+            content: '⚠️';
+            position: absolute;
+            left: 0.8rem;
+            top: 0.85rem;
+        }
+
+        /* ---- SCROLL INDICATOR ---- */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            color: var(--muted);
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            font-family: 'Share Tech Mono', monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            50% {
+                transform: translateX(-50%) translateY(8px);
+            }
+        }
+
+        .scroll-arrow {
+            font-size: 1.2rem;
+        }
+
+        /* ---- RESPONSIVE ---- */
+        @media (max-width: 600px) {
+            .rules-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .bring-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .conduct-list {
+                grid-template-columns: 1fr;
+            }
+
+            .disq-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Subtle vine patterns on sections */
+        .section-wrapper {
+            position: relative;
+            z-index: 10;
+        }
+
+        .section-wrapper::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: repeating-linear-gradient(180deg, var(--red-glow) 0px, transparent 4px, transparent 20px, var(--red-glow) 24px);
+            opacity: 0.12;
+        }
     </style>
 </head>
 
 <body>
-
+    <!-- BACKGROUND EFFECTS -->
+    <div class="lightning-bg"></div>
+    <div class="particles" id="particles"></div>
     <!-- 3D Background -->
     <div id="tsparticles"></div>
 
@@ -129,24 +870,411 @@
 
     <!-- ABOUT -->
     <section class="max-w-5xl mx-auto px-6 py-16 text-center">
-        <h2 class="text-3xl font-bold mb-6 glow text-red-500">About the Event</h2>
+        <div class="section-header">
+            <span class="icon"></span>
+            <h2>ABOUT THE EVENT</h2>
+            <div class="section-divider"></div>
+        </div>
         <p class="text-gray-400 leading-relaxed">
-            This is not just a hackathon — it's a battle in the digital upside down.
-            Collaborate with your team, fight through challenges, and create something
-            powerful enough to stand out.
+            Upside-Down Codex is a 24-hour hackathon where students and tech enthusiasts from AIML, Data Science, and
+            Computer Science come together to innovate, collaborate, and solve real-world problems. The event encourages
+            participants to combine creativity, technical skill, and teamwork under a time-bound challenge.
         </p>
     </section>
 
     <!-- RULES -->
-    <section class="max-w-5xl mx-auto px-6 py-16">
-        <h2 class="text-3xl font-bold mb-6 text-center text-red-500 glow">Rules</h2>
+    <!-- <section class="max-w-5xl mx-auto px-6 py-16">
+        <h2 class="text-3xl font-bold mb-6 text-center text-red-500 glow">Rules</h2> -->
 
-        <ul class="space-y-4 text-gray-300 text-center">
-            <li>✔ Team size: 2–4 members</li>
-            <li>✔ Bring your own laptop</li>
-            <li>✔ Projects must be original</li>
-            <li>✔ No plagiarism allowed</li>
-        </ul>
+    <!-- ===== GENERAL RULES ===== -->
+    <div class="section-wrapper">
+        <div class="container">
+            <div class="section-header">
+                <span class="icon">📋</span>
+                <h2>General Rules</h2>
+                <div class="section-divider"></div>
+            </div>
+            <div class="rules-grid">
+                <div class="rule-card" style="animation-delay:0.05s">
+                    <div class="rule-number">Rule · 01</div>
+                    <p><strong>Team Size:</strong> Exactly <strong>4 members</strong> mandatory. No more, no less.
+                    </p>
+                </div>
+                <div class="rule-card" style="animation-delay:0.1s">
+                    <div class="rule-number">Rule · 02</div>
+                    <p><strong>Entry Fee:</strong> ₹400 per team — paid at registration. Fee is
+                        <strong>non-refundable</strong>.
+                    </p>
+                </div>
+                <div class="rule-card" style="animation-delay:0.15s">
+                    <div class="rule-number">Rule · 03</div>
+                    <p><strong>Duration:</strong> 24 hours non-stop hackathon. Stay vigilant, stay in the zone.</p>
+                </div>
+                <div class="rule-card" style="animation-delay:0.2s">
+                    <div class="rule-number">Rule · 04</div>
+                    <p><strong>Registration:</strong> Team is not registered without <strong>full payment</strong>.
+                    </p>
+                </div>
+                <div class="rule-card" style="animation-delay:0.25s">
+                    <div class="rule-number">Rule · 05</div>
+                    <p><strong>Problem Statement:</strong> Given <strong>ON THE SPOT</strong> at start. No prior
+                        info shared.</p>
+                </div>
+                <div class="rule-card" style="animation-delay:0.3s">
+                    <div class="rule-number">Rule · 06</div>
+                    <p>Any programming language, framework, or tool allowed per rules. Choose your weapons wisely.
+                    </p>
+                </div>
+                <div class="rule-card" style="animation-delay:0.35s">
+                    <div class="rule-number">Rule · 07</div>
+                    <p><strong>AI Usage:</strong> Allowed in a <strong>controlled manner</strong>. Creativity must
+                        come from the team.</p>
+                </div>
+                <div class="rule-card" style="animation-delay:0.4s">
+                    <div class="rule-number">Rule · 08</div>
+                    <p>Internet provided by the college. <strong>Copy-pasting solutions is strictly banned.</strong>
+                    </p>
+                </div>
+                <div class="rule-card" style="animation-delay:0.45s">
+                    <div class="rule-number">Rule · 09</div>
+                    <p>Bring your own <strong>laptop, charger, power bank</strong>, and required gadgets.</p>
+                </div>
+                <div class="rule-card" style="animation-delay:0.5s">
+                    <div class="rule-number">Rule · 10</div>
+                    <p><strong>College ID card mandatory</strong> for identity verification at entry.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- wire separator -->
+    <div class="wire"></div>
+
+    <!-- ===== TEAM RULES ===== -->
+    <div class="section-wrapper">
+        <div class="container">
+            <div class="section-header">
+                <span class="icon">👥</span>
+                <h2>Team Rules</h2>
+                <div class="section-divider"></div>
+            </div>
+            <div class="rules-grid">
+                <div class="rule-card">
+                    <div class="rule-number">Team · 01</div>
+                    <p>Each team must have exactly <strong>4 members</strong> — no exceptions.</p>
+                </div>
+                <div class="rule-card">
+                    <div class="rule-number">Team · 02</div>
+                    <p>A single member <strong>cannot be part of two different teams</strong>.</p>
+                </div>
+                <div class="rule-card">
+                    <div class="rule-number">Team · 03</div>
+                    <p><strong>Team leader must be declared</strong> at the time of registration.</p>
+                </div>
+                <div class="rule-card">
+                    <div class="rule-number">Team · 04</div>
+                    <p>Once registered, <strong>team composition cannot be changed</strong>.</p>
+                </div>
+                <div class="rule-card">
+                    <div class="rule-number">Team · 05</div>
+                    <p>Invalid identity details at entry → <strong>immediate disqualification</strong>.</p>
+                </div>
+                <div class="rule-card"
+                    style="border-color:rgba(241,196,15,0.3);box-shadow:0 0 20px rgba(241,196,15,0.06)">
+                    <div class="rule-number" style="color:#f1c40f">Bonus · 🎯</div>
+                    <p style="color:#f1c40f">Bonus points if your team name is <strong>Stranger Things themed!</strong>
+                        🎯</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- wire separator -->
+    <div class="wire"></div>
+
+    <!-- ===== HACKING RULES ===== -->
+    <div class="section-wrapper">
+        <div class="container">
+            <div class="section-header">
+                <span class="icon">💻</span>
+                <h2>Hacking Rules</h2>
+                <div class="section-divider"></div>
+            </div>
+            <div class="rules-grid">
+                <div class="rule-card">
+                    <div class="rule-number">Hack · 01</div>
+                    <p>All code must be <strong>written during the hackathon only</strong>.</p>
+                </div>
+                <div class="rule-card">
+                    <div class="rule-number">Hack · 02</div>
+                    <p><strong>Pre-built projects or previously written code</strong> are strictly prohibited.</p>
+                </div>
+                <div class="rule-card">
+                    <div class="rule-number">Hack · 03</div>
+                    <p>Open source libraries/datasets allowed but must be <strong>clearly mentioned</strong>.</p>
+                </div>
+                <div class="rule-card">
+                    <div class="rule-number">Hack · 04</div>
+                    <p>Internet provided by college. <strong>Copy-pasting ready-made solutions banned.</strong></p>
+                </div>
+                <div class="rule-card">
+                    <div class="rule-number">Hack · 05</div>
+                    <p>Hardware project teams must also develop <strong>supporting software during the event</strong>.
+                    </p>
+                </div>
+                <div class="rule-card">
+                    <div class="rule-number">Hack · 06</div>
+                    <p>All work must be <strong>original and created during the event</strong>. No shortcuts into the
+                        Upside Down.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- wire separator -->
+    <div class="wire"></div>
+
+    <!-- ===== SUBMISSION RULES ===== -->
+    <div class="section-wrapper">
+        <div class="container">
+            <div class="section-header">
+                <span class="icon">🕹️</span>
+                <h2>Submission Rules</h2>
+                <div class="section-divider"></div>
+            </div>
+            <div class="rules-grid">
+                <div class="rule-card">
+                    <div class="rule-number">Submit · 01</div>
+                    <p>Project must be submitted <strong>before the 24-hour deadline</strong>.</p>
+                </div>
+                <div class="rule-card">
+                    <div class="rule-number">Submit · 02</div>
+                    <p><strong>Late submissions will NOT be accepted</strong> — "The gate closes on time."</p>
+                </div>
+                <div class="rule-card">
+                    <div class="rule-number">Submit · 03</div>
+                    <p>Submission must include a <strong>GitHub link + short demo video</strong>.</p>
+                </div>
+                <div class="rule-card">
+                    <div class="rule-number">Submit · 04</div>
+                    <p>Each team gets <strong>5 minutes</strong> for the final project presentation.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- wire separator -->
+    <div class="wire"></div>
+
+    <!-- ===== DEMOGORGON CLAUSE ===== -->
+    <div class="container">
+        <div class="section-header">
+            <span class="icon">⚡</span>
+            <h2>The Demogorgon Clause</h2>
+            <div class="section-divider"
+                style="background:linear-gradient(90deg,transparent,var(--red-glow),transparent)"></div>
+        </div>
+        <div class="demogorgon-clause">
+            <h3>⚡ Immediate Disqualification</h3>
+            <p style="font-size:0.88rem;color:#c8bdd8;margin-bottom:1.2rem;font-weight:300;">A team will be <strong
+                    style="color:var(--red-glow)">IMMEDIATELY DISQUALIFIED</strong> for any of the following:</p>
+            <ul class="disq-list">
+                <li>Cheating or plagiarism</li>
+                <li>Use of pre-built or copied code / technology</li>
+                <li>Interfering with another team's work</li>
+                <li>Disrespectful behavior towards organizers or participants</li>
+                <li>Submitting pre-written code</li>
+                <li>Invalid identity details at entry</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- wire separator -->
+    <div class="wire"></div>
+
+    <!-- ===== SCHEDULE ===== -->
+    <div class="section-wrapper">
+        <div class="container">
+            <div class="section-header">
+                <span class="icon">🕐</span>
+                <h2>The Upside Down Timeline</h2>
+                <div class="section-divider"></div>
+            </div>
+            <div class="schedule-wrap">
+                <table class="schedule-table">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Activity</th>
+                            <th>Assessment</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="time-col">9:00 AM – 10:00 AM</td>
+                            <td class="activity-col">🔦 Team Verification &amp; Inauguration</td>
+                            <td class="mark-col">—</td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">10:00 AM – 10:30 AM</td>
+                            <td class="activity-col">🗺️ Blocks Assigned to Groups</td>
+                            <td class="mark-col">—</td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">10:30 AM – 12:30 PM</td>
+                            <td class="activity-col">🚀 Hackathon Starts — Problem Statement ON THE SPOT + PPT
+                                Generation</td>
+                            <td class="mark-col">—</td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">12:30 PM – 2:00 PM</td>
+                            <td class="activity-col">⚖️ 1st Assessment — PPT Presentation + Idea Clarity</td>
+                            <td class="mark-col">/50</td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">2:00 PM – 3:00 PM</td>
+                            <td class="activity-col">🍽️ Lunch Break</td>
+                            <td class="mark-col">—</td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">3:00 PM – 8:00 PM</td>
+                            <td class="activity-col">💻 Working Phase 1 — Actual Coding Begins (40–50% target)</td>
+                            <td class="mark-col">—</td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">8:00 PM – 10:00 PM</td>
+                            <td class="activity-col">🍕 Dinner Break</td>
+                            <td class="mark-col">—</td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">10:00 PM – 12:00 AM</td>
+                            <td class="activity-col">⚖️ 2nd Assessment — Performance &amp; Coding Review</td>
+                            <td class="mark-col">/50</td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">12:00 AM – 1:00 AM</td>
+                            <td class="activity-col">🎉 Fun Activities — Into the Upside Down!</td>
+                            <td class="mark-col">—</td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">1:00 AM – 8:00 AM</td>
+                            <td class="activity-col">🌙 Working Phase 2 — Final Coding + PPT &amp; Documentation</td>
+                            <td class="mark-col">—</td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">8:00 AM – 10:00 AM</td>
+                            <td class="activity-col">🏁 3rd &amp; Final Assessment — Final Presentation &amp; Review
+                            </td>
+                            <td class="mark-col">Final</td>
+                        </tr>
+                        <tr>
+                            <td class="time-col" style="color:var(--red-glow);font-weight:700">10:00 AM</td>
+                            <td class="activity-col" style="color:var(--yellow)">🎊 End of Hackathon</td>
+                            <td class="mark-col">—</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- wire separator -->
+    <div class="wire"></div>
+
+    <!-- ===== WHAT TO BRING ===== -->
+    <div class="section-wrapper">
+        <div class="container">
+            <div class="section-header">
+                <span class="icon">🎒</span>
+                <h2>What to Bring</h2>
+                <div class="section-divider"></div>
+            </div>
+            <div class="bring-grid">
+                <div class="bring-item"><span class="bring-icon">💻</span>Laptop &amp; Charger</div>
+                <div class="bring-item"><span class="bring-icon">🔋</span>Power Bank</div>
+                <div class="bring-item"><span class="bring-icon">🔌</span>Extension Cord</div>
+                <div class="bring-item"><span class="bring-icon">🪪</span>College ID Card (hardcopy)</div>
+                <div class="bring-item"><span class="bring-icon">🧴</span>Personal Hygiene Items</div>
+                <div class="bring-item"><span class="bring-icon">🧥</span>Jacket / Blanket</div>
+                <div class="bring-item"><span class="bring-icon">💧</span>Water Bottle</div>
+                <div class="bring-item"><span class="bring-icon">🔦</span>Spirit &amp; Courage</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- wire separator -->
+    <div class="wire"></div>
+
+    <!-- ===== CODE OF CONDUCT ===== -->
+    <div class="section-wrapper">
+        <div class="container">
+            <div class="section-header">
+                <span class="icon">🤝</span>
+                <h2>Code of Conduct</h2>
+                <div class="section-divider"></div>
+            </div>
+            <ul class="conduct-list">
+                <li><strong>Respect &amp; Inclusivity</strong>Treat all participants, organizers, and staff with
+                    respect.</li>
+                <li><strong>Plagiarism</strong>All work must be original. Unauthorized resources → disqualification.
+                </li>
+                <li><strong>Harassment</strong>Profanity or disruptive behavior results in immediate disqualification.
+                </li>
+                <li><strong>Safety</strong>Follow all safety guidelines. Report concerns to organizers immediately.</li>
+                <li><strong>Professionalism</strong>Maintain sportsmanship and professionalism throughout.</li>
+                <li><strong>Campus Rules</strong>Strictly adhere to all college campus restrictions.</li>
+                <li><strong>Campus Stay</strong>Remain within college premises for the entire 24-hour duration. Leaving
+                    early is strictly prohibited unless permitted by organizers.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- wire separator -->
+    <div class="wire"></div>
+
+    <!-- ===== IMPORTANT NOTES ===== -->
+    <div class="section-wrapper">
+        <div class="container">
+            <div class="section-header">
+                <span class="icon">⚠️</span>
+                <h2>Important Notes</h2>
+                <div class="section-divider"></div>
+            </div>
+            <div class="notes-grid">
+                <div class="note-item">Organizers and judges reserve the right to modify rules and event structure as
+                    necessary.</div>
+                <div class="note-item">The decision of the judges will be <strong>final and binding</strong> on all
+                    teams.</div>
+                <div class="note-item">Any damage to college property must be <strong>compensated</strong> by the
+                    responsible participant.</div>
+                <div class="note-item">Organizers are not liable for any <strong>lost or stolen personal
+                        belongings</strong>.</div>
+                <div class="note-item">First Aid available on campus. Medical expenses beyond first aid are
+                    <strong>participant's responsibility</strong>.
+                </div>
+                <div class="note-item">All participants must wear the provided <strong>event ID cards</strong>
+                    throughout the hackathon.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-header">
+        <span class="icon"></span>
+        <h2>The Upside-Down awaits. Are you brave enough.🔦 </h2>
+        <div class="section-divider"></div>
+    </div>
+    <footer class="footer">
+        <div class="wire" style="margin-bottom:2rem"></div>
+        <!-- <div class="lights-string">
+    <div class="bulb"></div><div class="bulb"></div><div class="bulb"></div>
+    <div class="bulb"></div><div class="bulb"></div><div class="bulb"></div>
+    <div class="bulb"></div><div class="bulb"></div><div class="bulb"></div>
+    <div class="bulb"></div><div class="bulb"></div><div class="bulb"></div>
+  </div> -->
+        <!-- <div class="footer-quote">"The Upside-Down awaits. Are you brave enough?" 🔦</div> -->
+        <div class="footer-sub">Upside-Down Codex — Where Code Meets the Unknown</div>
+        <!-- <div class="footer-sub" style="margin-top:0.4rem;opacity:0.5">Samarth College of Engineering and Management</div> -->
+    </footer>
     </section>
 
     <!-- CTA -->
