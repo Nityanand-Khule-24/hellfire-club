@@ -2,8 +2,14 @@
 <html>
 
 <head>
-    <title>ID Card</title>
+    <title>HellFired ID Card</title>
+
+    <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Download -->
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
     <style>
         body {
             background: black;
@@ -13,10 +19,20 @@
         }
 
         .card {
-            margin-top: 50px;
+            margin-top: 40px;
             display: inline-block;
             padding: 20px;
             border: 2px solid red;
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: red;
+            color: white;
+            border: none;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -25,25 +41,45 @@
 
     <h1>🔥 HellFired ID Card</h1>
 
-    <div id="card"></div>
+    <div id="card">Loading...</div>
+
+    <button onclick="downloadCard()">Download ID</button>
 
     <script>
+
+        // 🔥 INIT SUPABASE
         const supabaseClient = supabase.createClient(
             "https://iwicuuudunilgxcaxgnn.supabase.co",
-            "YOUR_ANON_KEY"
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3aWN1dXVkdW5pbGd4Y2F4Z25uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwOTkwMDksImV4cCI6MjA4OTY3NTAwOX0.zMKajvwA0QcJhHk63uovRZva4c6q_5wSD9WCeXeMjUA" // 👉 PUT YOUR REAL KEY HERE
         );
 
-        // GET ID FROM URL
+        // 🔥 GET ID FROM URL
         const params = new URLSearchParams(window.location.search);
         const teamID = params.get("id");
 
+        console.log("Team ID from URL:", teamID);
+
+        // 🔥 LOAD DATA
         async function loadData() {
 
-            const { data } = await supabaseClient
+            if (!teamID) {
+                document.getElementById("card").innerHTML = "❌ No ID found in URL";
+                return;
+            }
+
+            const { data, error } = await supabaseClient
                 .from("teams")
                 .select("*")
                 .eq("team_id", teamID)
-                .single();
+                .maybeSingle(); // ✅ FIXED (NO 406)
+
+            console.log("DATA:", data);
+            console.log("ERROR:", error);
+
+            if (error) {
+                document.getElementById("card").innerHTML = "❌ Error loading data";
+                return;
+            }
 
             if (!data) {
                 document.getElementById("card").innerHTML = "❌ Invalid ID";
@@ -53,31 +89,38 @@
             const qr = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + data.team_id;
 
             document.getElementById("card").innerHTML = `
-<div class="card">
-<h2>HellFired Club</h2>
-<p>${data.team_name}</p>
-<p>${data.team_id}</p>
-<img src="${qr}">
-</div>
-`;
+    <div class="card" id="realCard">
+      <h2 style="color:red;">HellFired Club</h2>
+      <h3>HACKATHON PASS</h3>
+      <p><b>Team:</b> ${data.team_name}</p>
+      <p><b>ID:</b> ${data.team_id}</p>
+      <img src="${qr}">
+    </div>
+  `;
         }
 
+        // 🔥 CALL FUNCTION
         loadData();
-    </script>
-    <button onclick="downloadCard()">Download ID</button>
 
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-
-    <script>
+        // 🔥 DOWNLOAD FUNCTION
         function downloadCard() {
-            html2canvas(document.getElementById("card")).then(canvas => {
+            const card = document.getElementById("realCard");
+
+            if (!card) {
+                alert("Card not loaded yet");
+                return;
+            }
+
+            html2canvas(card).then(canvas => {
                 const link = document.createElement("a");
-                link.download = "ID.png";
+                link.download = "HellFired-ID.png";
                 link.href = canvas.toDataURL();
                 link.click();
             });
         }
+
     </script>
+
 </body>
 
 </html>
