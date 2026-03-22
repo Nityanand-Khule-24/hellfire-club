@@ -1,126 +1,59 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <title>HellFired ID Card</title>
-
-    <!-- Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <!-- Download -->
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-
-    <style>
-        body {
-            background: black;
-            color: white;
-            text-align: center;
-            font-family: monospace;
-        }
-
-        .card {
-            margin-top: 40px;
-            display: inline-block;
-            padding: 20px;
-            border: 2px solid red;
-            background: rgba(0, 0, 0, 0.8);
-        }
-
-        button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background: red;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HellFired Club ID</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+body {background:#050505;color:white;font-family:'Courier New',monospace;display:flex;justify-content:center;align-items:center;min-height:100vh;}
+#idCardContent{background:rgba(0,0,0,0.9);border:2px solid red;padding:20px;border-radius:12px;text-align:center;}
+img{margin-top:10px;}
+</style>
 </head>
-
 <body>
+<div id="idCardContent">Loading...</div>
 
-    <h1>🔥 HellFired ID Card</h1>
+<script>
+const supabaseClient = supabase.createClient(
+    "https://iwicuuudunilgxcaxgnn.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3aWN1dXVkdW5pbGd4Y2F4Z25uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwOTkwMDksImV4cCI6MjA4OTY3NTAwOX0.zMKajvwA0QcJhHk63uovRZva4c6q_5wSD9WCeXeMjUA" // 🔥 PUT YOUR REAL KEY HERE
+);
 
-    <div id="card">Loading...</div>
+const urlParams = new URLSearchParams(window.location.search);
+const teamID = urlParams.get("id");
 
-    <button onclick="downloadCard()">Download ID</button>
+if(!teamID){ document.getElementById("idCardContent").innerHTML="No Team ID provided!"; }
+else { fetchTeam(teamID); }
 
-    <script>
+async function fetchTeam(teamID){
+    const { data, error } = await supabaseClient.from("teams").select("*").eq("team_id",teamID).single();
+    if(error || !data){ document.getElementById("idCardContent").innerHTML="Team not found!"; return; }
 
-        // 🔥 INIT SUPABASE
-        const supabaseClient = supabase.createClient(
-            "https://iwicuuudunilgxcaxgnn.supabase.co",
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3aWN1dXVkdW5pbGd4Y2F4Z25uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwOTkwMDksImV4cCI6MjA4OTY3NTAwOX0.zMKajvwA0QcJhHk63uovRZva4c6q_5wSD9WCeXeMjUA" // 👉 PUT YOUR REAL KEY HERE
-        );
+    const members = [ {name:data.m1,phone:data.p1}, {name:data.m2,phone:data.p2}, {name:data.m3,phone:data.p3}, {name:data.m4,phone:data.p4} ]
+                    .filter(m=>m.name).map((m,i)=>`Member ${i+1}: ${m.name} - ${m.phone}`).join("<br>");
 
-        // 🔥 GET ID FROM URL
-        const params = new URLSearchParams(window.location.search);
-        const teamID = params.get("id");
+    const qrText = `
+HellFired Club
+Team Name: ${data.team_name}
+Team ID: ${data.team_id}
+${members.replace(/<br>/g,"\n")}
+UTR: ${data.utr}
+Email: ${data.email}
+`;
+    const qrData = encodeURIComponent(qrText);
+    const qr = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + qrData;
 
-        console.log("Team ID from URL:", teamID);
-
-        // 🔥 LOAD DATA
-        async function loadData() {
-
-            if (!teamID) {
-                document.getElementById("card").innerHTML = "❌ No ID found in URL";
-                return;
-            }
-
-            const { data, error } = await supabaseClient
-                .from("teams")
-                .select("*")
-                .eq("team_id", teamID)
-                .maybeSingle(); // ✅ FIXED (NO 406)
-
-            console.log("DATA:", data);
-            console.log("ERROR:", error);
-
-            if (error) {
-                document.getElementById("card").innerHTML = "❌ Error loading data";
-                return;
-            }
-
-            if (!data) {
-                document.getElementById("card").innerHTML = "❌ Invalid ID";
-                return;
-            }
-
-            const qr = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + data.team_id;
-
-            document.getElementById("card").innerHTML = `
-    <div class="card" id="realCard">
-      <h2 style="color:red;">HellFired Club</h2>
-      <h3>HACKATHON PASS</h3>
-      <p><b>Team:</b> ${data.team_name}</p>
-      <p><b>ID:</b> ${data.team_id}</p>
-      <img src="${qr}">
-    </div>
-  `;
-        }
-
-        // 🔥 CALL FUNCTION
-        loadData();
-
-        // 🔥 DOWNLOAD FUNCTION
-        function downloadCard() {
-            const card = document.getElementById("realCard");
-
-            if (!card) {
-                alert("Card not loaded yet");
-                return;
-            }
-
-            html2canvas(card).then(canvas => {
-                const link = document.createElement("a");
-                link.download = "HellFired-ID.png";
-                link.href = canvas.toDataURL();
-                link.click();
-            });
-        }
-
-    </script>
-
+    document.getElementById("idCardContent").innerHTML = `
+        <h2 style="color:red">HellFired Club</h2>
+        <p><strong>${data.team_name}</strong></p>
+        <p>ID: ${data.team_id}</p>
+        ${members}
+        <p>UTR: ${data.utr}</p>
+        <p>Email: ${data.email}</p>
+        <img src="${qr}">
+    `;
+}
+</script>
 </body>
-
 </html>

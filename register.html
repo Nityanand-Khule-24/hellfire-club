@@ -2,185 +2,169 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HellFired Registration</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HellFired Registration</title>
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <style>
-        body {
-            background: black;
-            color: white;
-            font-family: 'Courier New', monospace;
-        }
-
-        .glow {
-            text-shadow: 0 0 15px red;
-        }
-
-        .card {
-            background: rgba(0, 0, 0, 0.7);
-            border: 1px solid rgba(255, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-        }
-
-        input {
-            background: black;
-            border: 1px solid #550000;
-            padding: 10px;
-            width: 100%;
-            color: white;
-        }
-    </style>
+<style>
+body { margin:0; overflow-x:hidden; background: radial-gradient(circle at center, #050505,#000); color:white; font-family:'Courier New', monospace;}
+.glow{ text-shadow:0 0 10px red,0 0 20px red,0 0 40px #ff003c; animation:flicker 2s infinite alternate;}
+@keyframes flicker{0%{opacity:1;}100%{opacity:0.85;}}
+.card{background: rgba(0,0,0,0.55);border:1px solid rgba(255,0,0,0.3);backdrop-filter:blur(18px);box-shadow:0 0 30px rgba(255,0,0,0.25);transition:0.4s;}
+.card:hover{box-shadow:0 0 60px rgba(255,0,0,0.5);}
+input{background: rgba(0,0,0,0.8);border:1px solid #550000;padding:12px;width:100%;color:white;border-radius:6px;transition:0.3s;}
+input:focus{border-color:#ff003c;box-shadow:0 0 15px #ff003c;outline:none;}
+button{background:#ff003c;color:white;font-weight:bold;letter-spacing:1px;border-radius:8px;border:1px solid #ff003c;box-shadow:0 0 10px #ff003c,0 0 20px rgba(255,0,60,0.5);transition:0.3s;cursor:pointer;padding:12px 0;}
+button:hover{box-shadow:0 0 20px #ff003c,0 0 40px #ff003c,0 0 60px rgba(255,0,60,0.7);transform:scale(1.05);}
+.bg3d{position:fixed;width:100%;height:100%;top:0;left:0;background:linear-gradient(120deg,#000,#0a0a0a);transform:perspective(1200px) rotateX(8deg) rotateY(-8deg);animation:bgMove 12s infinite alternate ease-in-out;z-index:-2;}
+@keyframes bgMove{0%{transform:perspective(1200px) rotateX(8deg) rotateY(-8deg);}100%{transform:perspective(1200px) rotateX(-8deg) rotateY(8deg);}}
+.bg3d::before{content:"";position:absolute;width:200%;height:200%;background:radial-gradient(circle, rgba(255,0,60,0.2),transparent 60%);animation:fogMove 8s linear infinite;}
+@keyframes fogMove{0%{transform:translate(-20%,-20%);}100%{transform:translate(20%,20%);}}
+canvas{position:fixed;top:0;left:0;z-index:-1;}
+#idCardModal{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:none;justify-content:center;align-items:center;z-index:50;}
+#idCardContent{background:rgba(0,0,0,0.9);border:2px solid red;padding:20px;border-radius:12px;text-align:center;position:relative;}
+#closeCard{position:absolute;top:6px;right:10px;cursor:pointer;font-size:20px;color:red;}
+</style>
 </head>
 
 <body>
 
-    <div class="text-center py-10">
-        <h1 class="text-4xl text-red-600 glow">UPSIDE DOWN REGISTRATION</h1>
-    </div>
+<div class="bg3d"></div>
+<canvas id="particles"></canvas>
 
-    <div class="max-w-3xl mx-auto card p-8 rounded-xl">
-        <form id="form" class="space-y-6">
-
-            <input type="text" id="team" placeholder="Team Name" required>
-            <input type="email" id="email" placeholder="Team Email" required>
-
-            <div class="grid grid-cols-2 gap-4">
-                <input id="m1" placeholder="Member 1" required>
-                <input id="p1" placeholder="Phone" required>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-                <input id="m2" placeholder="Member 2" required>
-                <input id="p2" placeholder="Phone" required>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-                <input id="m3" placeholder="Member 3">
-                <input id="p3" placeholder="Phone">
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-                <input id="m4" placeholder="Member 4">
-                <input id="p4" placeholder="Phone">
-            </div>
-
-            <div class="text-center">
-                <h2 class="text-red-500">Scan & Pay</h2>
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=PAY" class="mx-auto w-40">
-                <input id="utr" placeholder="UTR ID" required>
-            </div>
-
-            <input type="file" id="file" required>
-
-            <button type="submit" class="w-full py-3 bg-red-600 rounded-lg">
-                🔥 Register
-            </button>
-
-        </form>
-    </div>
-
-    <div id="idCard" style="display:none; margin-top:30px;"></div>
-
-    <script>
-        emailjs.init({
-            publicKey: "dKtwUtnTWPBkqCxZP"
-        });
-
-        const supabaseClient = supabase.createClient(
-            "https://iwicuuudunilgxcaxgnn.supabase.co",
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3aWN1dXVkdW5pbGd4Y2F4Z25uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwOTkwMDksImV4cCI6MjA4OTY3NTAwOX0.zMKajvwA0QcJhHk63uovRZva4c6q_5wSD9WCeXeMjUA" // 🔥 PUT YOUR REAL KEY HERE
-        );
-
-        document.getElementById("form").addEventListener("submit", async (e) => {
-            e.preventDefault();
-
-            try {
-
-                const file = document.getElementById("file").files[0];
-                if (!file) return alert("Upload screenshot");
-
-                const fileName = Date.now() + "_" + file.name;
-
-                const { error: uploadError } = await supabaseClient.storage
-                    .from("screenshots")
-                    .upload(fileName, file);
-
-                if (uploadError) return alert("Upload failed");
-
-                const fileUrl =
-                    "https://iwicuuudunilgxcaxgnn.supabase.co/storage/v1/object/public/screenshots/" + fileName;
-
-                const teamID = "HFC-" + Math.random().toString(36).substring(2, 7).toUpperCase();
-
-                const teamName = document.getElementById("team").value;
-                const email = document.getElementById("email").value;
-
-                const { error } = await supabaseClient.from("teams").insert([{
-                    team_name: teamName,
-                    team_id: teamID,
-                    email: email,
-
-                    m1: m1.value, p1: p1.value,
-                    m2: m2.value, p2: p2.value,
-                    m3: m3.value, p3: p3.value,
-                    m4: m4.value, p4: p4.value,
-
-                    utr: utr.value,
-                    screenshot_url: fileUrl
-                }]);
-
-                if (error) return alert(error.message);
-
-                alert("🔥 Registered!\nID: " + teamID);
-
-                // ID CARD
-                generateIDCard(teamID, teamName);
-
-                // EMAIL
-                const link = "https://hellfireclubscoe.netlify.app/id.html?id=" + teamID;
-
-                emailjs.send("service_x4cte7o", "template_7yff2wj", {
-                    team_name: teamName,
-                    team_id: teamID,
-                    email: email,
-                    link: link
-                })
-                    .then((res) => {
-                        console.log("SUCCESS", res);
-                    })
-                    .catch((err) => {
-                        console.error("FAILED", err);
-                    });
-
-                document.getElementById("form").reset();
-
-            } catch (err) {
-                console.error(err);
-                alert("Error occurred");
-            }
-        });
-
-        function generateIDCard(teamID, teamName) {
-            const qr = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + teamID;
-
-            document.getElementById("idCard").innerHTML = `
-<div style="width:300px;padding:20px;background:black;border:2px solid red;text-align:center">
-<h2 style="color:red">HellFired Club</h2>
-<p>${teamName}</p>
-<p>${teamID}</p>
-<img src="${qr}">
+<div class="text-center py-10">
+    <h1 class="text-4xl text-red-600 glow">UPSIDE DOWN CODEX REGISTRATION</h1>
 </div>
-`;
 
-            document.getElementById("idCard").style.display = "block";
-        }
-    </script>
+<div class="max-w-3xl mx-auto card p-8 rounded-xl">
+    <form id="form" class="space-y-6">
+        <input type="text" id="team" placeholder="Team Name" required>
+        <input type="email" id="email" placeholder="Team Email / Team Leader Email" required>
+
+        <div class="grid grid-cols-2 gap-4">
+            <input id="m1" placeholder="Member 1" required>
+            <input id="p1" placeholder="Phone" required>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+            <input id="m2" placeholder="Member 2" required>
+            <input id="p2" placeholder="Phone" required>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+            <input id="m3" placeholder="Member 3">
+            <input id="p3" placeholder="Phone">
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+            <input id="m4" placeholder="Member 4">
+            <input id="p4" placeholder="Phone">
+        </div>
+
+        <!-- 🔹 Bank Payment Section -->
+        <div class="text-center">
+            <h2 class="text-red-500 mb-2">Pay Registration Fee</h2>
+            <img src="" alt="Scan to Pay" class="mx-auto w-40 border-2 border-red-500 rounded-lg p-2">
+            <p class="text-sm text-gray-300 mt-2">Scan this QR code with your banking app and pay the registration fee.</p>
+            <input id="utr" placeholder="Enter Transaction ID / UTR" required class="mt-2 w-full p-3 rounded-md text-black">
+        </div>
+
+        <input type="file" id="file" required>
+
+        <button type="submit" class="w-full">🔥 Register</button>
+    </form>
+</div>
+
+<!-- ID Card Modal -->
+<div id="idCardModal">
+    <div id="idCardContent"><span id="closeCard">✖</span></div>
+</div>
+
+<script>
+const supabaseClient = supabase.createClient(
+    "https://iwicuuudunilgxcaxgnn.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3aWN1dXVkdW5pbGd4Y2F4Z25uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwOTkwMDksImV4cCI6MjA4OTY3NTAwOX0.zMKajvwA0QcJhHk63uovRZva4c6q_5wSD9WCeXeMjUA"// 🔥 PUT YOUR REAL KEY HERE
+);
+
+document.getElementById("form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    try {
+        const file = document.getElementById("file").files[0];
+        if(!file) return alert("Upload screenshot");
+        const fileName = Date.now() + "_" + file.name;
+
+        const { error: uploadError } = await supabaseClient.storage
+            .from("screenshots").upload(fileName, file);
+        if(uploadError) return alert("Upload failed");
+
+        const fileUrl = "https://iwicuuudunilgxcaxgnn.supabase.co/storage/v1/object/public/screenshots/" + fileName;
+
+        const teamID = "HFC-" + Math.random().toString(36).substring(2,7).toUpperCase();
+        const teamName = document.getElementById("team").value;
+        const email = document.getElementById("email").value;
+
+        const { error } = await supabaseClient.from("teams").insert([{
+            team_name: teamName, team_id: teamID, email: email,
+            m1:m1.value, p1:p1.value, m2:m2.value, p2:p2.value,
+            m3:m3.value, p3:p3.value, m4:m4.value, p4:p4.value,
+            utr: utr.value, screenshot_url: fileUrl
+        }]);
+        if(error) return alert(error.message);
+
+        alert("🔥 Registered!\nID: "+teamID);
+        generateIDCard(teamID, teamName, email);
+        document.getElementById("form").reset();
+
+    } catch(err){ console.error(err); alert("Error occurred"); }
+});
+
+function generateIDCard(teamID, teamName, email){
+    const teamData = {
+        team_id: teamID, team_name: teamName,
+        members: [
+            {name:m1.value,phone:p1.value},
+            {name:m2.value,phone:p2.value},
+            {name:m3.value,phone:p3.value},
+            {name:m4.value,phone:p4.value}
+        ],
+        utr: utr.value, email: email
+    };
+    let membersInfo = teamData.members.filter(m=>m.name).map((m,i)=>`Member ${i+1}: ${m.name} - ${m.phone}`).join("\n");
+
+    const qrText = `
+HellFired Club
+Team Name: ${teamData.team_name}
+Team ID: ${teamData.team_id}
+${membersInfo}
+UTR: ${teamData.utr}
+Email: ${teamData.email}
+`;
+    const qrData = encodeURIComponent(qrText);
+    const qr = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + qrData;
+
+    const content = `
+        <h2 style="color:red">HellFired Club</h2>
+        <p><strong>${teamData.team_name}</strong></p>
+        <p>ID: ${teamData.team_id}</p>
+        ${membersInfo.replace(/\n/g,"<br>")}
+        <p>UTR: ${teamData.utr}</p>
+        <p>Email: ${teamData.email}</p>
+        <img src="${qr}">
+    `;
+
+    document.getElementById("idCardContent").innerHTML = `<span id="closeCard">✖</span>${content}`;
+    document.getElementById("idCardModal").style.display = "flex";
+
+    document.getElementById("closeCard").onclick = ()=>{document.getElementById("idCardModal").style.display="none";}
+}
+
+// Particles background
+const canvas=document.getElementById("particles"); const ctx=canvas.getContext("2d"); canvas.width=window.innerWidth; canvas.height=window.innerHeight;
+let particles=[]; for(let i=0;i<120;i++){particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*2,d:Math.random()});}
+function draw(){ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle="rgba(255,0,60,0.6)"; particles.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2,true);ctx.fill();}); update();}
+function update(){particles.forEach(p=>{p.y+=p.d;if(p.y>canvas.height){p.y=0;p.x=Math.random()*canvas.width;}});}
+setInterval(draw,30);
+</script>
 
 </body>
-
 </html>
