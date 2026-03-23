@@ -11,7 +11,9 @@
     <script src="https://unpkg.com/scrollreveal"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Share+Tech+Mono&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Share+Tech+Mono&family=Inter:wght@300;400;600&display=swap"
+        rel="stylesheet">
 
     <style>
         :root {
@@ -22,8 +24,16 @@
             --border: rgba(255, 0, 0, 0.2);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none !important; }
-        html { scroll-behavior: smooth; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none !important;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
 
         body {
             background: black;
@@ -32,29 +42,62 @@
             overflow-x: hidden;
         }
 
-        #tsparticles { position: fixed; inset: 0; z-index: -1; }
+        #tsparticles {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+        }
 
         /* --- VISUAL EFFECTS --- */
         .grain {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200'/%3E");
-            pointer-events: none; z-index: 9999; opacity: 0.05;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.05;
         }
 
         #cursor {
-            position: fixed; width: 10px; height: 10px; background: white;
-            border-radius: 50%; pointer-events: none; z-index: 10000;
-            box-shadow: 0 0 15px var(--red-glow); transition: transform 0.1s ease; transform: translate(-50%, -50%);
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            box-shadow: 0 0 15px var(--red-glow);
+            transition: transform 0.1s ease;
+            transform: translate(-50%, -50%);
         }
 
-        .glitch { position: relative; animation: glitch-anim 5s infinite linear alternate-reverse; }
+        .glitch {
+            position: relative;
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+
         @keyframes glitch-anim {
-            0% { transform: translate(0); }
-            2% { transform: translate(-3px, 2px); text-shadow: 2px 0 red, -2px 0 cyan; }
-            4% { transform: translate(0); text-shadow: none; }
+            0% {
+                transform: translate(0);
+            }
+
+            2% {
+                transform: translate(-3px, 2px);
+                text-shadow: 2px 0 red, -2px 0 cyan;
+            }
+
+            4% {
+                transform: translate(0);
+                text-shadow: none;
+            }
         }
 
-        .glow { text-shadow: 0 0 20px rgba(255, 60, 42, 0.8); }
+        .glow {
+            text-shadow: 0 0 20px rgba(255, 60, 42, 0.8);
+        }
 
         .glass-card {
             background: var(--card);
@@ -62,33 +105,64 @@
             border: 1px solid var(--border);
             transition: all 0.4s ease;
         }
-        .glass-card:hover { border-color: var(--red-glow); box-shadow: 0 15px 40px rgba(255, 0, 0, 0.2); }
+
+        .glass-card:hover {
+            border-color: var(--red-glow);
+            box-shadow: 0 15px 40px rgba(255, 0, 0, 0.2);
+        }
 
         .lightning-bg {
-            position: fixed; inset: 0; pointer-events: none; z-index: 0;
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
             background: radial-gradient(circle at 50% -20%, rgba(192, 57, 43, 0.15), transparent 70%);
         }
 
         .wire {
-            width: 90%; max-width: 900px; height: 1px;
+            width: 90%;
+            max-width: 900px;
+            height: 1px;
             background: linear-gradient(90deg, transparent, var(--red-glow), transparent);
-            margin: 4rem auto; opacity: 0.4;
+            margin: 4rem auto;
+            opacity: 0.4;
         }
 
         /* Rule Styling */
         .rule-card::before {
-            content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 4px;
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
             background: linear-gradient(to bottom, var(--red-glow), #7b1fa2);
         }
-        .rule-number { font-family: 'Share Tech Mono', monospace; font-size: 0.7rem; color: var(--red-glow); margin-bottom: 0.5rem; }
+
+        .rule-number {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--red-glow);
+            margin-bottom: 0.5rem;
+        }
 
         /* Table Styling */
         .schedule-table thead th {
             background: linear-gradient(90deg, #1a0005 0%, #000 100%);
-            font-family: 'Share Tech Mono', monospace; border-bottom: 2px solid var(--red-glow); padding: 1.2rem;
+            font-family: 'Share Tech Mono', monospace;
+            border-bottom: 2px solid var(--red-glow);
+            padding: 1.2rem;
         }
-        .time-col { font-family: 'Share Tech Mono', monospace; color: #00e5ff; }
-        .mark-col { color: #f1c40f; font-family: 'Share Tech Mono', monospace; }
+
+        .time-col {
+            font-family: 'Share Tech Mono', monospace;
+            color: #00e5ff;
+        }
+
+        .mark-col {
+            color: #f1c40f;
+            font-family: 'Share Tech Mono', monospace;
+        }
     </style>
 </head>
 
@@ -98,30 +172,57 @@
     <div class="lightning-bg"></div>
     <div id="tsparticles"></div>
 
-    <nav class="flex justify-between items-center px-10 py-6 border-b border-red-900 bg-black/40 backdrop-blur-xl sticky top-0 z-[1000]">
-        <div class="flex items-center gap-4">
-            <img src="assets/logo.png" alt="Logo" class="w-10 h-10 object-contain">
-            <h1 class="text-2xl font-black text-red-500 glow tracking-tighter uppercase">HellFireClub</h1>
-        </div>
-        <a href="index.html" class="text-gray-300 hover:text-red-500 font-mono text-sm tracking-widest transition-all">Back</a>
-    </nav>
+    <nav
+        class="flex justify-between items-center px-6 md:px-10 py-5 border-b border-red-900/30 bg-black/60 backdrop-blur-2xl sticky top-0 z-[1000]">
 
+        <div class="flex items-center gap-3 group cursor-pointer" onclick="location.href='index.html'">
+            <img src="assets/logo.png" alt="Logo"
+                class="w-8 h-8 md:w-10 md:h-10 object-contain group-hover:rotate-12 transition-transform">
+            <h1 class="text-xl md:text-2xl font-black text-red-500 glow tracking-tighter uppercase font-['Cinzel']">
+                HellFire<span class="hidden md:inline">Club</span>
+            </h1>
+        </div>
+
+        <div class="flex items-center gap-6 md:gap-10">
+            <a href="index.html"
+                class="hidden sm:block text-gray-400 hover:text-white font-mono text-[10px] uppercase tracking-[0.3em] transition-all">
+                [ Back ]
+            </a>
+
+            <button id="reg-mag-btn" onclick="location.href='#registration-zone'"
+                class="bg-[#ff3c3c] text-white px-5 py-2.5 rounded-full font-bold uppercase text-[10px] tracking-[0.1em] hover:scale-105 transition-all duration-300 shadow-[0_0_25px_rgba(255,60,60,0.4)] border border-white/10">
+                Register
+            </button>
+        </div>
+
+    </nav>
     <section class="text-center py-12 relative z-10">
         <h2 class="reveal text-2xl text-red-500 font-bold mb-4 glow">Event Starts In</h2>
-        <div id="countdown" class="reveal flex justify-center gap-6 text-3xl md:text-5xl font-bold text-white font-mono">
-            <div><span id="days">00</span><p class="text-sm text-gray-400 mt-2">Days</p></div>
-            <div><span id="hours">00</span><p class="text-sm text-gray-400 mt-2">Hours</p></div>
-            <div><span id="minutes">00</span><p class="text-sm text-gray-400 mt-2">Minutes</p></div>
-            <div><span id="seconds" class="text-red-500">00</span><p class="text-sm text-gray-400 mt-2">Seconds</p></div>
+        <div id="countdown"
+            class="reveal flex justify-center gap-6 text-3xl md:text-5xl font-bold text-white font-mono">
+            <div><span id="days">00</span>
+                <p class="text-sm text-gray-400 mt-2">Days</p>
+            </div>
+            <div><span id="hours">00</span>
+                <p class="text-sm text-gray-400 mt-2">Hours</p>
+            </div>
+            <div><span id="minutes">00</span>
+                <p class="text-sm text-gray-400 mt-2">Minutes</p>
+            </div>
+            <div><span id="seconds" class="text-red-500">00</span>
+                <p class="text-sm text-gray-400 mt-2">Seconds</p>
+            </div>
         </div>
     </section>
 
     <section class="text-center py-24 px-6 relative z-10">
-        <h1 class="reveal glitch text-5xl md:text-7xl font-bold text-red-600 mb-6 tracking-wide" data-text="UPSIDE DOWN CODEX 2026">
+        <h1 class="reveal glitch text-5xl md:text-7xl font-bold text-red-600 mb-6 tracking-wide"
+            data-text="UPSIDE DOWN CODEX 2026">
             UPSIDE DOWN CODEX 2026
         </h1>
         <p class="reveal text-gray-300 max-w-2xl mx-auto text-lg leading-relaxed">
-            Enter the Upside Down of innovation. Build, break, and dominate in a 24-hour coding war where only the strongest minds survive.
+            Enter the Upside Down of innovation. Build, break, and dominate in a 24-hour coding war where only the
+            strongest minds survive.
         </p>
     </section>
 
@@ -141,7 +242,9 @@
         <div class="reveal glass-card p-6 rounded-xl" data-tilt>
             <h3 class="text-xl font-bold text-red-500 mb-2">📍 Location</h3>
             <p class="text-gray-300 mb-4 text-sm">Samarth College Of Engineering And Management, Pune (412410)</p>
-            <button onclick="window.open('https://maps.app.goo.gl/JWmuBETWTB9rZuXY9', '_blank')" class="px-4 py-2 bg-red-600 rounded-lg text-white font-bold hover:scale-105 transition-all text-xs uppercase">View on Map</button>
+            <button onclick="window.open('https://maps.app.goo.gl/JWmuBETWTB9rZuXY9', '_blank')"
+                class="px-4 py-2 bg-red-600 rounded-lg text-white font-bold hover:scale-105 transition-all text-xs uppercase">View
+                on Map</button>
         </div>
     </section>
 
@@ -151,7 +254,9 @@
             <div class="wire !my-6 !w-48"></div>
         </div>
         <p class="reveal text-gray-400 leading-relaxed max-w-3xl mx-auto mt-4">
-            Upside-Down Codex is a 24-hour hackathon where students and tech enthusiasts from AIML, Data Science, and Computer Science come together to innovate, collaborate, and solve real-world problems. The event encourages participants to combine creativity, technical skill, and teamwork under a time-bound challenge.
+            Upside-Down Codex is a 24-hour hackathon where students and tech enthusiasts from AIML, Data Science, and
+            Computer Science come together to innovate, collaborate, and solve real-world problems. The event encourages
+            participants to combine creativity, technical skill, and teamwork under a time-bound challenge.
         </p>
     </section>
 
@@ -164,7 +269,9 @@
             </div>
             <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden">
                 <div class="rule-number">Rule · 02</div>
-                <p><strong>Entry Fee:</strong> ₹400 per team — paid at registration. Fee is <strong>non-refundable</strong>.</p>
+                <p><strong>Entry Fee:</strong> ₹400 per team — paid at registration. Fee is
+                    <strong>non-refundable</strong>.
+                </p>
             </div>
             <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden">
                 <div class="rule-number">Rule · 03</div>
@@ -176,7 +283,8 @@
             </div>
             <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden">
                 <div class="rule-number">Rule · 05</div>
-                <p><strong>Problem Statement:</strong> Given <strong>ON THE SPOT</strong> at start. No prior info shared.</p>
+                <p><strong>Problem Statement:</strong> Given <strong>ON THE SPOT</strong> at start. No prior info
+                    shared.</p>
             </div>
             <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden">
                 <div class="rule-number">Rule · 06</div>
@@ -184,7 +292,8 @@
             </div>
             <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden">
                 <div class="rule-number">Rule · 07</div>
-                <p><strong>AI Usage:</strong> Allowed in a <strong>controlled manner</strong>. Creativity must come from the team.</p>
+                <p><strong>AI Usage:</strong> Allowed in a <strong>controlled manner</strong>. Creativity must come from
+                    the team.</p>
             </div>
             <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden">
                 <div class="rule-number">Rule · 08</div>
@@ -206,11 +315,26 @@
     <section class="container mx-auto px-6 py-16">
         <h2 class="reveal text-3xl font-bold text-center text-red-500 glow mb-12 uppercase">👥 Team Rules</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden"><div class="rule-number">Team · 01</div><p>Each team must have exactly <strong>4 members</strong> — no exceptions.</p></div>
-            <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden"><div class="rule-number">Team · 02</div><p>A single member <strong>cannot be part of two different teams</strong>.</p></div>
-            <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden"><div class="rule-number">Team · 03</div><p><strong>Team leader must be declared</strong> at the time of registration.</p></div>
-            <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden"><div class="rule-number">Team · 04</div><p>Once registered, <strong>team composition cannot be changed</strong>.</p></div>
-            <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden"><div class="rule-number">Team · 05</div><p>Invalid identity details at entry → <strong>immediate disqualification</strong>.</p></div>
+            <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden">
+                <div class="rule-number">Team · 01</div>
+                <p>Each team must have exactly <strong>4 members</strong> — no exceptions.</p>
+            </div>
+            <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden">
+                <div class="rule-number">Team · 02</div>
+                <p>A single member <strong>cannot be part of two different teams</strong>.</p>
+            </div>
+            <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden">
+                <div class="rule-number">Team · 03</div>
+                <p><strong>Team leader must be declared</strong> at the time of registration.</p>
+            </div>
+            <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden">
+                <div class="rule-number">Team · 04</div>
+                <p>Once registered, <strong>team composition cannot be changed</strong>.</p>
+            </div>
+            <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden">
+                <div class="rule-number">Team · 05</div>
+                <p>Invalid identity details at entry → <strong>immediate disqualification</strong>.</p>
+            </div>
         </div>
     </section>
 
@@ -219,12 +343,31 @@
     <section class="container mx-auto px-6 py-16">
         <h2 class="reveal text-3xl font-bold text-center text-red-500 glow mb-12 uppercase">💻 Hacking Rules</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden"><div class="rule-number">Hack · 01</div><p>All code must be <strong>written during the hackathon only</strong>.</p></div>
-            <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden"><div class="rule-number">Hack · 02</div><p><strong>Pre-built projects or previously written code</strong> are strictly prohibited.</p></div>
-            <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden"><div class="rule-number">Hack · 03</div><p>Open source libraries/datasets allowed but must be <strong>clearly mentioned</strong>.</p></div>
-            <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden"><div class="rule-number">Hack · 04</div><p>Internet provided by college. <strong>Copy-pasting ready-made solutions banned.</strong></p></div>
-            <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden"><div class="rule-number">Hack · 05</div><p>Hardware project teams must also develop <strong>supporting software during the event</strong>.</p></div>
-            <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden"><div class="rule-number">Hack · 06</div><p>All work must be <strong>original and created during the event</strong>. No shortcuts into the Upside Down.</p></div>
+            <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden">
+                <div class="rule-number">Hack · 01</div>
+                <p>All code must be <strong>written during the hackathon only</strong>.</p>
+            </div>
+            <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden">
+                <div class="rule-number">Hack · 02</div>
+                <p><strong>Pre-built projects or previously written code</strong> are strictly prohibited.</p>
+            </div>
+            <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden">
+                <div class="rule-number">Hack · 03</div>
+                <p>Open source libraries/datasets allowed but must be <strong>clearly mentioned</strong>.</p>
+            </div>
+            <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden">
+                <div class="rule-number">Hack · 04</div>
+                <p>Internet provided by college. <strong>Copy-pasting ready-made solutions banned.</strong></p>
+            </div>
+            <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden">
+                <div class="rule-number">Hack · 05</div>
+                <p>Hardware project teams must also develop <strong>supporting software during the event</strong>.</p>
+            </div>
+            <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden">
+                <div class="rule-number">Hack · 06</div>
+                <p>All work must be <strong>original and created during the event</strong>. No shortcuts into the Upside
+                    Down.</p>
+            </div>
         </div>
     </section>
 
@@ -233,10 +376,22 @@
     <section class="container mx-auto px-6 py-16">
         <h2 class="reveal text-3xl font-bold text-center text-red-500 glow mb-12 uppercase">🕹️ Submission Rules</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden"><div class="rule-number">Submit · 01</div><p>Project must be submitted <strong>before the 24-hour deadline</strong>.</p></div>
-            <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden"><div class="rule-number">Submit · 02</div><p><strong>Late submissions will NOT be accepted</strong> — "The gate closes on time."</p></div>
-            <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden"><div class="rule-number">Submit · 03</div><p>Submission must include a <strong>GitHub link + short demo video</strong>.</p></div>
-            <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden"><div class="rule-number">Submit · 04</div><p>Each team gets <strong>5 minutes</strong> for the final project presentation.</p></div>
+            <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden">
+                <div class="rule-number">Submit · 01</div>
+                <p>Project must be submitted <strong>before the 24-hour deadline</strong>.</p>
+            </div>
+            <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden">
+                <div class="rule-number">Submit · 02</div>
+                <p><strong>Late submissions will NOT be accepted</strong> — "The gate closes on time."</p>
+            </div>
+            <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden">
+                <div class="rule-number">Submit · 03</div>
+                <p>Submission must include a <strong>GitHub link + short demo video</strong>.</p>
+            </div>
+            <div class="reveal rule-card glass-card p-6 rounded relative overflow-hidden">
+                <div class="rule-number">Submit · 04</div>
+                <p>Each team gets <strong>5 minutes</strong> for the final project presentation.</p>
+            </div>
         </div>
     </section>
 
@@ -245,7 +400,8 @@
     <section class="container mx-auto px-6 py-10">
         <div class="reveal glass-card p-10 border-red-600 rounded-3xl bg-red-950/10">
             <h3 class="text-3xl text-red-500 font-black glow uppercase italic mb-8">⚡ The Demogorgon Clause</h3>
-            <p class="text-gray-400 mb-8 font-mono">A team will be IMMEDIATELY DISQUALIFIED for any of the following:</p>
+            <p class="text-gray-400 mb-8 font-mono">A team will be IMMEDIATELY DISQUALIFIED for any of the following:
+            </p>
             <ul class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
                 <li class="bg-black/40 p-4 border-l-2 border-red-600">Cheating or plagiarism</li>
                 <li class="bg-black/40 p-4 border-l-2 border-red-600">Use of pre-built or copied code</li>
@@ -260,7 +416,8 @@
     <div class="wire"></div>
 
     <section class="container mx-auto px-6 py-16">
-        <h2 class="reveal text-4xl font-bold text-center text-red-500 glow mb-12 uppercase">🕐 The Upside Down Timeline</h2>
+        <h2 class="reveal text-4xl font-bold text-center text-red-500 glow mb-12 uppercase">🕐 The Upside Down Timeline
+        </h2>
         <div class="reveal glass-card rounded-[2.5rem] overflow-hidden overflow-x-auto">
             <table class="schedule-table w-full text-left">
                 <thead>
@@ -271,25 +428,76 @@
                     </tr>
                 </thead>
                 <tbody class="text-gray-400 text-sm">
-                    <tr><td class="p-6 time-col">9:00 AM – 10:00 AM</td><td class="p-6">🔦 Team Verification & Inauguration</td><td class="p-6 mark-col">—</td></tr>
-                    <tr><td class="p-6 time-col">10:00 AM – 10:30 AM</td><td class="p-6">🗺️ Blocks Assigned to Groups</td><td class="p-6 mark-col">—</td></tr>
-                    <tr><td class="p-6 time-col font-bold">10:30 AM – 12:30 PM</td><td class="p-6 text-red-500 font-bold">🚀 Hackathon Starts — Problem Reveal + PPT Generation</td><td class="p-6 mark-col">—</td></tr>
-                    <tr><td class="p-6 time-col">12:30 PM – 2:00 PM</td><td class="p-6 font-semibold">⚖️ 1st Assessment — PPT Presentation + Idea Clarity</td><td class="p-6 mark-col">/50</td></tr>
-                    <tr><td class="p-6 time-col">2:00 PM – 3:00 PM</td><td class="p-6 italic">🍽️ Lunch Break</td><td class="p-6 mark-col">—</td></tr>
-                    <tr><td class="p-6 time-col">3:00 PM – 8:00 PM</td><td class="p-6">💻 Working Phase 1 — Actual Coding Begins (40–50% target)</td><td class="p-6 mark-col">—</td></tr>
-                    <tr><td class="p-6 time-col">8:00 PM – 10:00 PM</td><td class="p-6 italic">🍕 Dinner Break</td><td class="p-6 mark-col">—</td></tr>
-                    <tr><td class="p-6 time-col">10:00 PM – 12:00 AM</td><td class="p-6 font-semibold">⚖️ 2nd Assessment — Performance & Coding Review</td><td class="p-6 mark-col">/50</td></tr>
-                    <tr><td class="p-6 time-col font-bold">12:00 AM – 1:00 AM</td><td class="p-6 text-purple-400 font-bold uppercase">🎉 Fun Activities — Into the Upside Down!</td><td class="p-6 mark-col">—</td></tr>
-                    <tr><td class="p-6 time-col">1:00 AM – 8:00 AM</td><td class="p-6">🌙 Working Phase 2 — Final Coding + PPT & Documentation</td><td class="p-6 mark-col">—</td></tr>
-                    <tr><td class="p-6 time-col font-bold text-white uppercase">8:00 AM – 10:00 AM</td><td class="p-6 font-bold uppercase text-white tracking-widest">🏁 3rd & Final Assessment</td><td class="p-6 mark-col font-black">Final</td></tr>
-                    <tr class="bg-red-950/10"><td class="p-6 time-col font-bold text-red-500">10:00 AM</td><td class="p-6 text-yellow-500 font-black uppercase tracking-widest">🎊 End of Hackathon</td><td class="p-6 mark-col">—</td></tr>
+                    <tr>
+                        <td class="p-6 time-col">9:00 AM – 10:00 AM</td>
+                        <td class="p-6">🔦 Team Verification & Inauguration</td>
+                        <td class="p-6 mark-col">—</td>
+                    </tr>
+                    <tr>
+                        <td class="p-6 time-col">10:00 AM – 10:30 AM</td>
+                        <td class="p-6">🗺️ Blocks Assigned to Groups</td>
+                        <td class="p-6 mark-col">—</td>
+                    </tr>
+                    <tr>
+                        <td class="p-6 time-col font-bold">10:30 AM – 12:30 PM</td>
+                        <td class="p-6 text-red-500 font-bold">🚀 Hackathon Starts — Problem Reveal + PPT Generation
+                        </td>
+                        <td class="p-6 mark-col">—</td>
+                    </tr>
+                    <tr>
+                        <td class="p-6 time-col">12:30 PM – 2:00 PM</td>
+                        <td class="p-6 font-semibold">⚖️ 1st Assessment — PPT Presentation + Idea Clarity</td>
+                        <td class="p-6 mark-col">/50</td>
+                    </tr>
+                    <tr>
+                        <td class="p-6 time-col">2:00 PM – 3:00 PM</td>
+                        <td class="p-6 italic">🍽️ Lunch Break</td>
+                        <td class="p-6 mark-col">—</td>
+                    </tr>
+                    <tr>
+                        <td class="p-6 time-col">3:00 PM – 8:00 PM</td>
+                        <td class="p-6">💻 Working Phase 1 — Actual Coding Begins (40–50% target)</td>
+                        <td class="p-6 mark-col">—</td>
+                    </tr>
+                    <tr>
+                        <td class="p-6 time-col">8:00 PM – 10:00 PM</td>
+                        <td class="p-6 italic">🍕 Dinner Break</td>
+                        <td class="p-6 mark-col">—</td>
+                    </tr>
+                    <tr>
+                        <td class="p-6 time-col">10:00 PM – 12:00 AM</td>
+                        <td class="p-6 font-semibold">⚖️ 2nd Assessment — Performance & Coding Review</td>
+                        <td class="p-6 mark-col">/50</td>
+                    </tr>
+                    <tr>
+                        <td class="p-6 time-col font-bold">12:00 AM – 1:00 AM</td>
+                        <td class="p-6 text-purple-400 font-bold uppercase">🎉 Fun Activities — Into the Upside Down!
+                        </td>
+                        <td class="p-6 mark-col">—</td>
+                    </tr>
+                    <tr>
+                        <td class="p-6 time-col">1:00 AM – 8:00 AM</td>
+                        <td class="p-6">🌙 Working Phase 2 — Final Coding + PPT & Documentation</td>
+                        <td class="p-6 mark-col">—</td>
+                    </tr>
+                    <tr>
+                        <td class="p-6 time-col font-bold text-white uppercase">8:00 AM – 10:00 AM</td>
+                        <td class="p-6 font-bold uppercase text-white tracking-widest">🏁 3rd & Final Assessment</td>
+                        <td class="p-6 mark-col font-black">Final</td>
+                    </tr>
+                    <tr class="bg-red-950/10">
+                        <td class="p-6 time-col font-bold text-red-500">10:00 AM</td>
+                        <td class="p-6 text-yellow-500 font-black uppercase tracking-widest">🎊 End of Hackathon</td>
+                        <td class="p-6 mark-col">—</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
     </section>
 
     <section class="container mx-auto px-6 py-16">
-        <h2 class="reveal text-3xl font-bold text-center text-red-500 glow mb-12 uppercase tracking-widest">🎒 What to Bring</h2>
+        <h2 class="reveal text-3xl font-bold text-center text-red-500 glow mb-12 uppercase tracking-widest">🎒 What to
+            Bring</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <div class="reveal bring-item"><span>💻</span>Laptop & Charger</div>
             <div class="reveal bring-item"><span>🔋</span>Power Bank</div>
@@ -305,32 +513,56 @@
     <section class="container mx-auto px-6 py-16 border-t border-white/5">
         <h2 class="reveal text-3xl font-bold text-center text-red-500 glow mb-12 uppercase">🤝 Code of Conduct</h2>
         <div class="grid md:grid-cols-2 gap-8">
-            <div class="reveal glass-card p-6 rounded-xl"><strong>Respect & Inclusivity</strong>: Treat all participants, organizers, and staff with respect.</div>
-            <div class="reveal glass-card p-6 rounded-xl"><strong>Plagiarism</strong>: All work must be original. Unauthorized resources → disqualification.</div>
-            <div class="reveal glass-card p-6 rounded-xl"><strong>Harassment</strong>: Profanity or disruptive behavior results in immediate disqualification.</div>
-            <div class="reveal glass-card p-6 rounded-xl"><strong>Safety</strong>: Follow all safety guidelines. Report concerns to organizers immediately.</div>
-            <div class="reveal glass-card p-6 rounded-xl"><strong>Professionalism</strong>: Maintain sportsmanship and professionalism throughout.</div>
-            <div class="reveal glass-card p-6 rounded-xl"><strong>Campus Rules</strong>: Strictly adhere to all college campus restrictions.</div>
-            <div class="reveal glass-card p-6 rounded-xl md:col-span-2"><strong>Campus Stay</strong>: Remain within college premises for the entire 24-hour duration. Leaving early is strictly prohibited unless permitted by organizers.</div>
+            <div class="reveal glass-card p-6 rounded-xl"><strong>Respect & Inclusivity</strong>: Treat all
+                participants, organizers, and staff with respect.</div>
+            <div class="reveal glass-card p-6 rounded-xl"><strong>Plagiarism</strong>: All work must be original.
+                Unauthorized resources → disqualification.</div>
+            <div class="reveal glass-card p-6 rounded-xl"><strong>Harassment</strong>: Profanity or disruptive behavior
+                results in immediate disqualification.</div>
+            <div class="reveal glass-card p-6 rounded-xl"><strong>Safety</strong>: Follow all safety guidelines. Report
+                concerns to organizers immediately.</div>
+            <div class="reveal glass-card p-6 rounded-xl"><strong>Professionalism</strong>: Maintain sportsmanship and
+                professionalism throughout.</div>
+            <div class="reveal glass-card p-6 rounded-xl"><strong>Campus Rules</strong>: Strictly adhere to all college
+                campus restrictions.</div>
+            <div class="reveal glass-card p-6 rounded-xl md:col-span-2"><strong>Campus Stay</strong>: Remain within
+                college premises for the entire 24-hour duration. Leaving early is strictly prohibited unless permitted
+                by organizers.</div>
         </div>
     </section>
 
     <section class="container mx-auto px-6 py-16 bg-red-950/5 rounded-3xl mb-20">
         <h2 class="reveal text-3xl font-bold text-center text-red-500 glow mb-12 uppercase">⚠️ Important Notes</h2>
         <div class="grid md:grid-cols-2 gap-4">
-            <div class="reveal glass-card p-4 rounded text-sm text-gray-400">Organizers reserve the right to modify rules and structure as necessary.</div>
-            <div class="reveal glass-card p-4 rounded text-sm text-gray-400">The decision of the judges will be <strong>final and binding</strong> on all teams.</div>
-            <div class="reveal glass-card p-4 rounded text-sm text-gray-400">Any damage to college property must be compensated by the participant.</div>
-            <div class="reveal glass-card p-4 rounded text-sm text-gray-400">Organizers are not liable for any lost or stolen personal belongings.</div>
-            <div class="reveal glass-card p-4 rounded text-sm text-gray-400">First Aid available on campus. Medical expenses beyond first aid are participant's responsibility.</div>
-            <div class="reveal glass-card p-4 rounded text-sm text-gray-400">All participants must wear the provided event ID cards throughout the hackathon.</div>
+            <div class="reveal glass-card p-4 rounded text-sm text-gray-400">Organizers reserve the right to modify
+                rules and structure as necessary.</div>
+            <div class="reveal glass-card p-4 rounded text-sm text-gray-400">The decision of the judges will be
+                <strong>final and binding</strong> on all teams.
+            </div>
+            <div class="reveal glass-card p-4 rounded text-sm text-gray-400">Any damage to college property must be
+                compensated by the participant.</div>
+            <div class="reveal glass-card p-4 rounded text-sm text-gray-400">Organizers are not liable for any lost or
+                stolen personal belongings.</div>
+            <div class="reveal glass-card p-4 rounded text-sm text-gray-400">First Aid available on campus. Medical
+                expenses beyond first aid are participant's responsibility.</div>
+            <div class="reveal glass-card p-4 rounded text-sm text-gray-400">All participants must wear the provided
+                event ID cards throughout the hackathon.</div>
         </div>
     </section>
 
-    <footer class="text-center py-32 border-t border-red-900/20">
-        <h2 class="reveal text-4xl font-bold text-red-600 glow font-['Creepster'] mb-12 tracking-widest uppercase">The Upside-Down awaits. Are you brave enough?</h2>
-        <button onclick="window.location.href='register.html'" class="reveal px-16 py-6 bg-red-600 rounded-full font-black text-xl hover:scale-110 transition-all uppercase shadow-[0_0_60px_rgba(255,60,60,0.5)]">Register Now</button>
-        <p class="mt-20 text-gray-600 text-xs font-mono tracking-[0.5em] uppercase">Upside-Down Codex — Where Code Meets the Unknown</p>
+    <footer id="registration-zone" class="text-center py-32 border-t border-red-900/20">
+        <h2 class="reveal text-4xl font-bold text-red-600 glow font-['Creepster'] mb-12 tracking-widest uppercase">
+            The Upside-Down awaits. Are you brave enough?
+        </h2>
+
+        <button onclick="window.location.href='register.html'"
+            class="px-8 py-4 bg-red-600 rounded-lg font-bold hover:scale-110 transition-transform shadow-[0_0_30px_rgba(255,0,0,0.3)]">
+            Register Now
+        </button>
+
+        <p class="mt-20 text-gray-600 text-xs font-mono tracking-[0.5em] uppercase">
+            Upside-Down Codex — Where Code Meets the Unknown
+        </p>
     </footer>
 
     <script>
@@ -349,4 +581,5 @@
         tsParticles.load("tsparticles", { particles: { number: { value: 60 }, color: { value: "#ff3c3c" }, opacity: { value: 0.3 }, size: { value: 2 }, move: { enable: true, speed: 1.5, direction: "top", random: true } } });
     </script>
 </body>
+
 </html>
