@@ -2,214 +2,255 @@
 <html lang="en">
 
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HellFired Admin Panel</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HellFired Admin Panel</title>
 
-<!-- Tailwind CSS -->
-<script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
 
-<style>
-body { background: #0a0a0a; color: white; font-family: 'Courier New', monospace; }
-.glow { text-shadow:0 0 10px red,0 0 20px red,0 0 40px #ff003c; animation:flicker 2s infinite alternate; }
-@keyframes flicker { 0% { opacity:1 } 100% { opacity:0.85 } }
-.card { background: rgba(0,0,0,0.55); border:1px solid rgba(255,0,0,0.3); backdrop-filter: blur(18px); box-shadow:0 0 30px rgba(255,0,0,0.25); transition:0.4s; }
-.card:hover { box-shadow:0 0 60px rgba(255,0,0,0.5); }
-input, button { border-radius:6px; padding:8px; margin:4px 0; }
-button { background:#ff003c; border:1px solid #ff003c; color:white; font-weight:bold; cursor:pointer; box-shadow:0 0 10px #ff003c,0 0 20px rgba(255,0,60,0.5); transition:0.3s; }
-button:hover { box-shadow:0 0 20px #ff003c,0 0 40px #ff003c,0 0 60px rgba(255,0,60,0.7); transform: scale(1.05); }
-table { width:100%; border-collapse:collapse; margin-top:20px; }
-th, td { padding:8px; border:1px solid #ff003c; text-align:left; }
-th { background-color:#220000; }
-tr.present td { background-color: rgba(0,255,0,0.1); }
-tr.absent td { background-color: rgba(255,0,0,0.1); }
-.toggle-switch { position: relative; display: inline-block; width: 50px; height: 24px; }
-.toggle-switch input { display: none; }
-.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 24px; }
-.slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
-input:checked + .slider { background-color: #ff003c; }
-input:checked + .slider:before { transform: translateX(26px); }
-#idCardModal { position:fixed; inset:0; background:rgba(0,0,0,0.85); display:none; justify-content:center; align-items:center; z-index:50; }
-#idCardContent { background: rgba(0,0,0,0.9); border:2px solid red; padding:20px; border-radius:12px; text-align:center; position:relative; }
-#closeCard { position:absolute; top:6px; right:10px; cursor:pointer; font-size:20px; color:red; }
-</style>
+    <style>
+        body { background: #050505; color: white; font-family: 'Courier New', monospace; margin: 0; }
+        .glow { text-shadow: 0 0 10px red, 0 0 20px red; }
+        .card { background: rgba(20, 20, 20, 0.8); border: 1px solid rgba(255, 0, 0, 0.2); backdrop-filter: blur(10px); }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.85rem; }
+        th, td { padding: 12px; border: 1px solid #330000; text-align: left; }
+        th { background-color: #1a0000; color: #ff003c; text-transform: uppercase; }
+        
+        tr.present { border-left: 4px solid #00ff00; background: rgba(0, 255, 0, 0.05); }
+        tr.absent { border-left: 4px solid #ff003c; background: rgba(255, 0, 0, 0.05); }
+
+        .toggle-switch { position: relative; display: inline-block; width: 45px; height: 20px; }
+        .toggle-switch input { display: none; }
+        .slider { position: absolute; cursor: pointer; inset: 0; background-color: #333; transition: .4s; border-radius: 20px; }
+        .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: #ff003c; }
+        input:checked + .slider:before { transform: translateX(25px); }
+
+        .btn-delete { color: #555; transition: 0.3s; cursor: pointer; font-size: 1.2rem; }
+        .btn-delete:hover { color: #ff003c; transform: scale(1.2); }
+
+        #idCardModal { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        #idCardContent { background: #000; border: 2px solid red; padding: 25px; border-radius: 12px; text-align: center; position: relative; max-width: 400px; width: 90%; }
+        
+        input[type="text"], input[type="email"], input[type="password"] {
+            background: #111; border: 1px solid #444; color: white; padding: 10px; border-radius: 4px;
+        }
+        button { background: #ff003c; color: white; font-weight: bold; padding: 10px 20px; border-radius: 4px; transition: 0.3s; }
+        button:hover { background: #cc0030; box-shadow: 0 0 15px #ff003c; }
+        
+        #historyLog { max-height: 200px; overflow-y: auto; font-size: 0.75rem; border: 1px solid #222; padding: 10px; background: #000; }
+    </style>
 </head>
 
 <body>
 
-<div class="text-center py-6">
-  <h1 class="text-3xl glow">HellFireClub Admin Panel</h1>
-</div>
+    <div id="loginCard" class="flex items-center justify-center min-h-screen">
+        <div class="card p-8 rounded-xl max-w-sm w-full">
+            <h1 class="text-2xl text-red-600 glow font-bold text-center mb-6 uppercase">Admin Access</h1>
+            <input type="email" id="adminEmail" placeholder="Admin Email" class="w-full mb-4">
+            <input type="password" id="adminPass" placeholder="Password" class="w-full mb-6">
+            <button id="loginBtn" class="w-full">ENTER CODEX</button>
+            <p id="loginError" class="text-red-500 mt-4 text-center text-sm"></p>
+        </div>
+    </div>
 
-<!-- Login Form -->
-<div id="loginCard" class="max-w-md mx-auto card p-6 rounded-xl">
-  <h2 class="text-red-500 mb-6 text-center text-xl glow">Admin Login</h2>
-  <div class="mb-4">
-    <input type="email" id="adminEmail" placeholder="Email" class="w-full block p-3 rounded-md text-black" />
-  </div>
-  <div class="mb-4">
-    <input type="password" id="adminPass" placeholder="Password" class="w-full block p-3 rounded-md text-black" />
-  </div>
-  <div class="mb-2">
-    <button id="loginBtn" class="w-full py-3">Login</button>
-  </div>
-  <p id="loginError" class="text-red-500 mt-2 text-center"></p>
-</div>
+    <div id="dashboard" class="hidden p-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex justify-between items-center mb-8 border-b border-red-900 pb-4">
+                <h1 class="text-3xl text-red-600 glow font-bold uppercase">HellFire Admin</h1>
+                <button onclick="location.reload()" class="bg-gray-800 text-xs px-4 py-2">LOGOUT</button>
+            </div>
 
-<!-- Dashboard -->
-<div id="dashboard" style="display:none;">
-  <div class="max-w-5xl mx-auto p-6">
-    <h2 class="text-red-500 glow mb-4">QR Scan / Mark Attendance</h2>
-    <div id="qr-reader" style="width:400px;"></div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
+                <div class="card p-6 rounded-xl text-center">
+                    <h2 class="text-gray-400 text-sm uppercase">Total Teams</h2>
+                    <p id="totalStat" class="text-5xl font-bold text-red-600">0</p>
+                </div>
+                <div class="card p-6 rounded-xl text-center">
+                    <h2 class="text-gray-400 text-sm uppercase">Checked In</h2>
+                    <p id="presentStat" class="text-5xl font-bold text-green-500">0</p>
+                </div>
+                <div class="card p-4 rounded-xl">
+                    <h2 class="text-red-500 font-bold mb-2 text-sm uppercase">Scanner</h2>
+                    <div id="qr-reader" class="w-full bg-black rounded overflow-hidden"></div>
+                </div>
+            </div>
 
-    <h2 class="text-red-500 glow mt-8 mb-2">Registered Teams</h2>
-    <table id="teamsTable">
-      <thead>
-        <tr>
-          <th>Team ID</th>
-          <th>Team Name</th>
-          <th>Email</th>
-          <th>Attendance</th>
-          <th>View ID</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
-</div>
+            <div class="mb-8">
+                <h2 class="text-xs text-gray-500 mb-2 uppercase tracking-widest">Live Check-in History</h2>
+                <div id="historyLog" class="rounded-lg">
+                    <p class="text-gray-700 italic">No activity yet...</p>
+                </div>
+            </div>
 
-<!-- ID Card Modal -->
-<div id="idCardModal">
-  <div id="idCardContent"><span id="closeCard">✖</span></div>
-</div>
+            <div class="flex flex-col md:flex-row gap-4 justify-between items-center mb-4">
+                <input type="text" id="searchInput" placeholder="Search by Name or ID..." class="w-full md:w-80">
+                <button onclick="loadTeams()" class="text-xs">🔄 REFRESH TABLE</button>
+            </div>
 
-<!-- JS Dependencies -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+            <div class="card rounded-xl overflow-hidden mb-10">
+                <table id="teamsTable">
+                    <thead>
+                        <tr>
+                            <th>Team ID</th>
+                            <th>Team Name</th>
+                            <th>Payment (UTR)</th>
+                            <th>Attendance</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-<script>
-const supabaseClient = supabase.createClient(
-  "https://iwicuuudunilgxcaxgnn.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3aWN1dXVkdW5pbGd4Y2F4Z25uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwOTkwMDksImV4cCI6MjA4OTY3NTAwOX0.zMKajvwA0QcJhHk63uovRZva4c6q_5wSD9WCeXeMjUA"
-);
+    <div id="idCardModal">
+        <div id="idCardContent">
+            <span id="closeCard" class="absolute top-2 right-4 text-2xl cursor-pointer text-red-500">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
 
-const adminEmail = "admin@hellfired.com";
-const adminPassword = "hellfire123";
+    <script>
+        const SB_URL = "https://iwicuuudunilgxcaxgnn.supabase.co";
+        const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3aWN1dXVkdW5pbGd4Y2F4Z25uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwOTkwMDksImV4cCI6MjA4OTY3NTAwOX0.zMKajvwA0QcJhHk63uovRZva4c6q_5wSD9WCeXeMjUA";
+        const adminEmail = "admin@hellfired.com";
+        const adminPassword = "hellfire123";
 
-const loginCard = document.getElementById("loginCard");
-const dashboard = document.getElementById("dashboard");
-const loginBtn = document.getElementById("loginBtn");
-const loginError = document.getElementById("loginError");
+        const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 
-loginBtn.addEventListener("click", () => {
-  const email = document.getElementById("adminEmail").value;
-  const pass = document.getElementById("adminPass").value;
-  if(email === adminEmail && pass === adminPassword){
-    loginCard.style.display = "none";
-    dashboard.style.display = "block";
-    loadTeams();
-    initQRScanner();
-  } else {
-    loginError.textContent = "Invalid credentials!";
-  }
-});
+        document.getElementById("loginBtn").addEventListener("click", () => {
+            const email = document.getElementById("adminEmail").value;
+            const pass = document.getElementById("adminPass").value;
+            if (email === adminEmail && pass === adminPassword) {
+                document.getElementById("loginCard").classList.add("hidden");
+                document.getElementById("dashboard").classList.remove("hidden");
+                loadTeams();
+                initQRScanner();
+            } else {
+                document.getElementById("loginError").innerText = "Invalid Admin Credentials.";
+            }
+        });
 
-// ---------------- Load Teams Table ----------------
-async function loadTeams() {
-  const { data, error } = await supabaseClient.from("teams").select("*");
-  if(error) return console.error(error);
+        async function loadTeams() {
+            const { data, error } = await supabaseClient.from("teams").select("*").order('created_at', { ascending: false });
+            if (error) return console.error(error);
 
-  const tbody = document.querySelector("#teamsTable tbody");
-  tbody.innerHTML = "";
+            renderTable(data);
+            document.getElementById("totalStat").innerText = data.length;
+            document.getElementById("presentStat").innerText = data.filter(t => t.attendance).length;
 
-  data.forEach(team => {
-    const tr = document.createElement("tr");
-    tr.classList.add(team.attendance ? 'present' : 'absent');
+            document.getElementById("searchInput").oninput = (e) => {
+                const val = e.target.value.toLowerCase();
+                const filtered = data.filter(t => t.team_name.toLowerCase().includes(val) || t.team_id.toLowerCase().includes(val));
+                renderTable(filtered);
+            };
+        }
 
-    tr.innerHTML = `
-      <td>${team.team_id}</td>
-      <td>${team.team_name}</td>
-      <td>${team.email}</td>
-      <td>
-        <label class="toggle-switch">
-          <input type="checkbox" ${team.attendance ? 'checked' : ''} onchange="toggleAttendance('${team.team_id}', this)">
-          <span class="slider"></span>
-        </label>
-        <span id="status-${team.team_id}" class="ml-2">${team.attendance ? 'Present' : 'Absent'}</span>
-      </td>
-      <td><button onclick="viewID('${team.team_id}')">View ID</button></td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
+        function renderTable(teams) {
+            const tbody = document.querySelector("#teamsTable tbody");
+            tbody.innerHTML = "";
+            teams.forEach(team => {
+                const tr = document.createElement("tr");
+                tr.className = team.attendance ? "present" : "absent";
+                tr.innerHTML = `
+                    <td class="font-bold text-red-500">${team.team_id}</td>
+                    <td><b>${team.team_name}</b><br><span class="text-[10px] text-gray-500">${team.email}</span></td>
+                    <td>
+                        <span class="text-xs font-mono">${team.utr}</span><br>
+                        <a href="${team.screenshot_url}" target="_blank" class="text-blue-500 text-[10px] underline">VERIFY PAYMENT</a>
+                    </td>
+                    <td>
+                        <label class="toggle-switch">
+                            <input type="checkbox" ${team.attendance ? 'checked' : ''} onchange="updateStatus('${team.team_id}', '${team.team_name}', this.checked)">
+                            <span class="slider"></span>
+                        </label>
+                    </td>
+                    <td>
+                        <div class="flex items-center gap-4">
+                            <button class="text-[10px] px-2 py-1" onclick="viewDetails('${team.team_id}')">DETAILS</button>
+                            <span class="btn-delete" title="Delete Team" onclick="deleteTeam('${team.team_id}', '${team.team_name}')">🗑</span>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
 
-// ---------------- Toggle Attendance ----------------
-async function toggleAttendance(teamID, checkbox) {
-  const statusSpan = document.getElementById(`status-${teamID}`);
-  try {
-    const { error } = await supabaseClient.from("teams")
-      .update({ attendance: checkbox.checked })
-      .eq("team_id", teamID);
-    if(error) { alert("Error updating attendance"); console.error(error); checkbox.checked = !checkbox.checked; return; }
-    statusSpan.textContent = checkbox.checked ? 'Present' : 'Absent';
-    const tr = checkbox.closest('tr');
-    tr.classList.toggle('present', checkbox.checked);
-    tr.classList.toggle('absent', !checkbox.checked);
-  } catch(err){ 
-    console.error(err); 
-    checkbox.checked = !checkbox.checked; 
-  }
-}
+        async function updateStatus(teamID, teamName, status) {
+            const { error } = await supabaseClient.from("teams").update({ attendance: status }).eq("team_id", teamID);
+            if (error) {
+                alert("Error updating status");
+            } else {
+                addToLog(teamName, status ? "Checked In" : "Checked Out");
+                loadTeams();
+            }
+        }
 
-// ---------------- View ID Card ----------------
-async function viewID(teamID){
-  const { data, error } = await supabaseClient.from("teams").select("*").eq("team_id", teamID).single();
-  if(error || !data) return alert("Team not found!");
+        async function deleteTeam(teamID, teamName) {
+            if (confirm(`⚠️ DELETE TEAM: ${teamName}?\nThis is permanent.`)) {
+                const verify = prompt("Type 'DELETE' to confirm:");
+                if (verify === "DELETE") {
+                    const { error } = await supabaseClient.from("teams").delete().eq("team_id", teamID);
+                    if (error) alert(error.message);
+                    else loadTeams();
+                }
+            }
+        }
 
-  const membersInfo = [1,2,3,4].map(i=>{
-    if(data['m'+i]) return `Member ${i}: ${data['m'+i]} - ${data['p'+i]}`;
-    return '';
-  }).filter(Boolean).join('<br>');
+        function addToLog(teamName, action) {
+            const log = document.getElementById("historyLog");
+            const time = new Date().toLocaleTimeString();
+            const entry = document.createElement("p");
+            entry.className = action.includes("In") ? "text-green-400 mb-1" : "text-red-400 mb-1";
+            entry.innerHTML = `[${time}] <b>${teamName}</b> - ${action}`;
+            log.prepend(entry);
+        }
 
-  const qrText = encodeURIComponent(`
-Team Name: ${data.team_name}
-Team ID: ${data.team_id}
-${[1,2,3,4].map(i=>data['m'+i]?`Member ${i}: ${data['m'+i]} - ${data['p'+i]}`:'').filter(Boolean).join('\n')}
-UTR: ${data.utr}
-Email: ${data.email}
-`);
+        function initQRScanner() {
+            const scanner = new Html5QrcodeScanner("qr-reader", { fps: 10, qrbox: 200 });
+            scanner.render(async (text) => {
+                let teamID = text;
+                if (text.includes("ID: ")) {
+                    teamID = text.split("ID: ")[1].split("\n")[0].trim();
+                }
 
-  const qr = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${qrText}`;
+                const { data, error } = await supabaseClient.from("teams").update({ attendance: true }).eq("team_id", teamID).select();
+                if (data && data.length > 0) {
+                    addToLog(data[0].team_name, "Scanned In");
+                    alert("✅ ACCESS GRANTED: " + data[0].team_name);
+                    loadTeams();
+                } else {
+                    alert("❌ UNKNOWN PASS");
+                }
+            });
+        }
 
-  document.getElementById("idCardContent").innerHTML = `
-    <span id="closeCard">✖</span>
-    <h2 style="color:red">HellFired Club</h2>
-    <p><strong>${data.team_name}</strong></p>
-    <p>ID: ${data.team_id}</p>
-    ${membersInfo}
-    <p>UTR: ${data.utr}</p>
-    <p>Email: ${data.email}</p>
-    <img src="${qr}">
-  `;
-  document.getElementById("idCardModal").style.display = "flex";
-  document.getElementById("closeCard").onclick = ()=>{ document.getElementById("idCardModal").style.display="none"; }
-}
+        async function viewDetails(teamID) {
+            const { data, error } = await supabaseClient.from("teams").select("*").eq("team_id", teamID).single();
+            if (error) return;
 
-// ---------------- Initialize QR Scanner ----------------
-function initQRScanner() {
-  const html5QrcodeScanner = new Html5QrcodeScanner(
-    "qr-reader", { fps:10, qrbox:250 }, false
-  );
-  html5QrcodeScanner.render(async (decodedText) => {
-    try {
-      const { error } = await supabaseClient.from("teams")
-        .update({ attendance:true })
-        .eq("team_id", decodedText);
-      if(!error){ loadTeams(); }
-    } catch(err){ console.error(err); }
-  });
-}
-</script>
+            const modalBody = document.getElementById("modalBody");
+            modalBody.innerHTML = `
+                <h2 class="text-red-600 font-bold text-xl mb-4 uppercase underline">${data.team_name}</h2>
+                <div class="text-left text-xs space-y-2 mb-6">
+                    <p><b class="text-red-500">Leader:</b> ${data.m1} (${data.p1})</p>
+                    <p><b class="text-red-500">M2:</b> ${data.m2} (${data.p2})</p>
+                    <p><b class="text-red-500">M3:</b> ${data.m3 || 'N/A'}</p>
+                    <p><b class="text-red-500">M4:</b> ${data.m4 || 'N/A'}</p>
+                    <p><b class="text-red-500">UTR:</b> ${data.utr}</p>
+                </div>
+                <img src="${data.screenshot_url}" class="w-full rounded border border-gray-700">
+            `;
+            document.getElementById("idCardModal").style.display = "flex";
+        }
 
+        document.getElementById("closeCard").onclick = () => document.getElementById("idCardModal").style.display = "none";
+    </script>
 </body>
+
 </html>
